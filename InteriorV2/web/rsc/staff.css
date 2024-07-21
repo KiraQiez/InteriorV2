@@ -1,0 +1,56 @@
+.progress-bar {
+    background-color: #fff;
+}
+
+.progress {
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #dee2e6;
+    border-collapse: collapse;
+
+}
+
+.table tbody td {
+    font-size: 14px;
+    color: #555;
+}
+
+    .btn-view {
+        background-color: #17a2ba; /* Custom color for view button */
+        color: white;
+    }
+
+    .btn-view:hover {
+        background-color: #138496;
+        color: white;
+    }
+
+    .btn-edit {
+        background-color: #ffc107; /* Custom color for edit button */
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+        color: white;
+    }
+
+    .btn-delete {
+        background-color: #dc3545; /* Custom color for delete button */
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+        color: white;
+    }

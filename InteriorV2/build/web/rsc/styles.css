@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --background-color: #eff4fa;
+    --pop-color: #fff;
+    --submenu-bg-color: #e9ecef;
+    --submenu-hover-color: #5A5F65;
+    --submenu-text-color: #333;
+    --submenu-item-hover-color: #E9ECEF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profile img {
+    border-radius: 20px;
+    width: 100px;
+    height: 100px;
+}
+
+.profile-info h4 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.profile-info p {
+    margin: 0;
+    color: gray;
+    font-size: 0.9em;
+}
+
+.sidebar {
+    padding: 15px;
+    height: 100vh;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar .nav-link {
+    color: #333;
+    margin: 10px 0;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+    border-radius: 5px;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+.sidebar .collapse .nav-link {
+    margin-left: 20px;
+}
+
+.submenu {
+    background-color: var(--submenu-bg-color);
+    border-radius: 5px;
+    margin-left: 10px;
+    padding-left: 10px;
+}
+
+.submenu .nav-link {
+    color: var(--submenu-text-color);
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.submenu .nav-link:hover {
+    background-color: var(--submenu-item-hover-color);
+    color: #C55AFF;
+}
+
+.dropI {
+    margin-right: auto;
+}
+
+.title {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #5A5F65;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    background-color: transparent;
+    font-weight: bold;
+}
+
