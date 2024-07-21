@@ -2,12 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
-<jsp:useBean id="user" scope="request" class="com.interior.model.User" />
+<jsp:useBean id="user" scope="session" class="com.interior.model.User" />
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,11 +19,10 @@
     <link rel="stylesheet" href="rsc/styles.css">
     <link rel="stylesheet" href="rsc/staff.css">
 </head>
-
 <body>
     
-     <sql:setDataSource var="myDatasource" driver="org.apache.derby.jdbc.ClientDriver"
-                            url="jdbc:derby://localhost:1527/InteriorDB" user="root" password="root" />
+    <sql:setDataSource var="myDatasource" driver="org.apache.derby.jdbc.ClientDriver"
+                       url="jdbc:derby://localhost:1527/InteriorDB" user="root" password="root" />
      
     <script>
         function printPage() {
@@ -42,15 +39,14 @@
                         <h2 class="ms-3">INTERIOR</h2>
                     </div>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto d-flex align-items-center">
                             <li class="nav-item me-1">
                                 <a class="nav-link d-flex align-items-center" href="#">
-                                    <img src="rsc/images/flag-icon.png" alt="Flag" width="25" height="20"
-                                        class="me-2">English
+                                    <img src="rsc/images/flag-icon.png" alt="Flag" width="25" height="20" class="me-2">English
                                 </a>
                             </li>
                             <li class="nav-item me-1">
@@ -61,9 +57,8 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" href="#">
-                                    <img src="rsc/images/profilePic.png" class="rounded-circle me-2" alt="Profile"
-                                        width="40" height="40">
-                                    <%= user.getUsername() %>
+                                    <img src="rsc/images/profilePic.png" class="rounded-circle me-2" alt="Profile" width="40" height="40">
+                                    <c:out value="${user.username}" />
                                     <i class="fas fa-ellipsis-v ms-2"></i>
                                 </a>
                             </li>
@@ -78,7 +73,7 @@
                     <img src="rsc/images/profilePic.png" alt="Profile">
                     <div class="profile-info mt-2">
                         <h4>
-                            <%= user.getUsername() %>
+                            <c:out value="${user.username}" />
                         </h4>
                         <p>Administrator</p>
                     </div>
@@ -126,6 +121,6 @@
                     <li class="nav-item">
                         <a href="StaffStaff.jsp" class="nav-link"><i class="fas fa-chalkboard-teacher"></i>Staff</a>
                     </li>
- 
                 </ul>
             </nav>
+

@@ -48,7 +48,7 @@ public class UserDAO {
 
         try {
             con = DBConnection.getConnection();
-            String sql = "SELECT userid, email, username, usertype, profileimage FROM users WHERE username = ?";
+            String sql = "SELECT userid, email, username, usertype FROM users WHERE username = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, user.getUsername());
             rs = ps.executeQuery();
@@ -59,8 +59,6 @@ public class UserDAO {
                 userInfo.setEmail(rs.getString("email"));
                 userInfo.setUsername(rs.getString("username"));
                 userInfo.setUsertype(rs.getString("usertype"));
-               userInfo.setUserImage(rs.getBytes("profileimage"));
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,15 +91,14 @@ public class UserDAO {
                 throw new Exception("Username or Email already exists");
             }
 
-            String sql = "INSERT INTO USERS (userid, email, username, password, usertype, ProfileImage) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO USERS (userid, email, username, password, usertype, profileimage) VALUES(?,?,?,?,?,?)";
 
             String email = user.getEmail();
             String username = user.getUsername();
             String password = user.getPassword();
             String usertype = user.getUsertype();
             String userId = generateUserId(con);
-            String image = "rsc/images/profilePic.png";
-
+            String image = user.getUserImage();  
             ps = con.prepareStatement(sql);
             ps.setString(1, userId);
             ps.setString(2, email);

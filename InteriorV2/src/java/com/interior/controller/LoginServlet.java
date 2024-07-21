@@ -43,12 +43,10 @@ public class LoginServlet extends HttpServlet {
                 user = userDAO.userInfo(user);
 
                 // Set session attributes
-                HttpSession session = request.getSession();
-                session.setAttribute("userId", user.getUserid());
-                session.setAttribute("username", user.getUsername());
-                session.setAttribute("email", user.getEmail());
-                session.setAttribute("usertype", user.getUsertype());
-                session.setAttribute("userImage", user.getUserImage()); 
+                 HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                    
+                
 
                 request.setAttribute("message", "Login successful.");
                 request.setAttribute("user", user);
