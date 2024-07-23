@@ -42,6 +42,84 @@ CREATE TABLE PAYMENT (
 
 
 
+-- Create the STAFF table
+CREATE TABLE STAFF (
+    staffID VARCHAR(8) PRIMARY KEY NOT NULL,
+    staffName VARCHAR(255) NOT NULL,
+    staffType VARCHAR(30) NOT NULL,
+
+    FOREIGN KEY (staffID) REFERENCES USERS(userID)
+);
+-- Create the BLOCK table
+CREATE TABLE BLOCK (
+    blockID VARCHAR(2) PRIMARY KEY NOT NULL,
+    blockName VARCHAR(255) NOT NULL,
+    blockDesc VARCHAR(255)
+);
+-- Create the ROOM table
+CREATE TABLE ROOM (
+    roomID VARCHAR(8) PRIMARY KEY NOT NULL,
+    blockID VARCHAR(2),
+    roomType VARCHAR(8),
+    maxCapacity INT,
+    availability INT,
+    FOREIGN KEY (blockID) REFERENCES BLOCK(blockID)
+);
+
+--NEW TABLE SESSION
+-- Step 1: Create the SESSION table
+CREATE TABLE SESSION (
+    sessionID INT PRIMARY KEY,
+    sessionName VARCHAR(30),
+    sessionStatus VARCHAR(10)
+);
+
+
+-- Create the REPORT table
+CREATE TABLE REPORT (
+    reportID VARCHAR(8) PRIMARY KEY NOT NULL,
+    reportTitle VARCHAR(255) NOT NULL,
+    reportDesc VARCHAR(255) NOT NULL,
+    reportStatus VARCHAR(50) NOT NULL,
+    studentID VARCHAR(8) NOT NULL,
+    handledByStaffID VARCHAR(8),
+    checkedByStaffID VARCHAR(8),
+    FOREIGN KEY (studentID) REFERENCES STUDENT(stdID),
+    FOREIGN KEY (handledByStaffID) REFERENCES STAFF(staffID),
+    FOREIGN KEY (checkedByStaffID) REFERENCES STAFF(staffID)
+);
+
+
+-- Create the BOOKING table
+CREATE TABLE BOOKING (
+    bookingID VARCHAR(8) PRIMARY KEY NOT NULL,
+    bookingDate DATE NOT NULL,
+    bookstatus VARCHAR(10) NOT NULL,
+    stdID VARCHAR(8) NOT NULL,
+    staffID VARCHAR(8) NOT NULL,
+    roomID VARCHAR(8) NOT NULL,
+    sessionID INT,
+
+    FOREIGN KEY (stdID) REFERENCES STUDENT(stdID),
+    FOREIGN KEY (staffID) REFERENCES STAFF(staffID),
+    FOREIGN KEY (roomID) REFERENCES ROOM(roomID),
+    FOREIGN KEY (sessionID) REFERENCES SESSION(sessionID)
+);
+
+-- INSERT INTO USER
+INSERT INTO ROOT.USERS (USERID, EMAIL, USERNAME, PASSWORD, USERTYPE, USERIMAGE) 
+	VALUES ('U0000001', 'iqmal@interior.com', 'Iqmal', 'staff1', 'Staff', NULL);
+
+-- INSERT TO BLOCK AND ROOM
+INSERT INTO BLOCK VALUES ('A', 'ANGGERIK', 'NICE');
+INSERT INTO ROOM VALUES ('A001', 'A', 'REGULAR', 4, 4);
+
+INSERT INTO ROOT."SESSION" (SESSIONID, SESSIONNAME, SESSIONSTATUS) 
+	VALUES (20240308, 'MARCH 2024 - AUGUST 2024', 'ACTIVE')
+
+
+
+INSERT INTO PAYMENT (paymentID, paymentStatus) VALUES ('P0000001', 'Completed');
 -- Insert data into the Payment table
 INSERT INTO PAYMENT (paymentID, paymentStatus) VALUES ('P0000001', 'Completed');
 INSERT INTO PAYMENT (paymentID, paymentStatus) VALUES ('P0000002', 'Completed');
