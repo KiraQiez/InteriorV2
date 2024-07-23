@@ -114,7 +114,26 @@
                                 <a href="StaffBooking.jsp" class="nav-link"><i class="fas fa-book"></i>Bookings</a>
                             </li>
                             <li class="nav-item">
-                                <a href="StaffPayment.jsp" class="nav-link"><i class="fas fa-flag"></i>Reports</a>
+                                <a href="StaffReport.jsp" class="nav-link"><i class="fas fa-flag"></i>Reports</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="#roomSubMenu" class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="roomSubMenu">
+                            <div><i class="fas fa-bed"></i>Room</div>
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <ul class="nav flex-column collapse submenu" id="roomSubMenu" >
+                            <li class="nav-item">
+                                <a href="StaffRoom.jsp" class="nav-link"><i class="fas fa-list-ul"></i>Room List</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="StaffBooking.jsp" class="nav-link"><i class="fas fa-book"></i>Bookings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="StaffReport.jsp" class="nav-link"><i class="fas fa-flag"></i>Reports</a>
                             </li>
                         </ul>
                     </li>
