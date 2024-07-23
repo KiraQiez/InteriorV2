@@ -36,11 +36,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Student ID</th>
-                                    <th>Full Name</th>
-                                    <th>IC Number</th>
-                                    <th>Phone</th>
-                                    <th>Status</th>
+                                    <th>Room ID</th>
+                                    <th>Block</th>
+                                    <th>Max capacity</th>
+                                    <th>Availability</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -58,19 +57,9 @@
                                                 <% count++; %>
                                                 <td width="20px"><%= count %></td>
                                                 <td>${room.roomID}</td>
-                                                <td>${student.stdName}</td>
-                                                <td>${student.stdIC}</td>
-                                                <td>${student.stdPhone}</td>
-                                                <td>
-                                                    <c:choose>
-                                                        <c:when test="${student.stdStatus == 'Active'}">
-                                                            <span class="badge bg-success">Active</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="badge bg-danger">Inactive</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </td>
+                                                <td>${room.blockID}</td>
+                                                <td>${room.maxCapacity}</td>
+                                                <td>${room.availability}</td>
                                                 <td width="150px">
                                                     <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
                                                     <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></button>

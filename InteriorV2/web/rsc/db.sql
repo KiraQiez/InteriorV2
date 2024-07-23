@@ -62,7 +62,7 @@ CREATE TABLE ROOM (
     blockID VARCHAR(2),
     roomType VARCHAR(8),
     maxCapacity INT,
-    availability VARCHAR(20),
+    availability INT,
     FOREIGN KEY (blockID) REFERENCES BLOCK(blockID)
 );
 
@@ -106,7 +106,20 @@ CREATE TABLE BOOKING (
     FOREIGN KEY (sessionID) REFERENCES SESSION(sessionID)
 );
 
+-- INSERT INTO USER
+INSERT INTO ROOT.USERS (USERID, EMAIL, USERNAME, PASSWORD, USERTYPE, USERIMAGE) 
+	VALUES ('U0000001', 'iqmal@interior.com', 'Iqmal', 'staff1', 'Staff', NULL);
 
+-- INSERT TO BLOCK AND ROOM
+INSERT INTO BLOCK VALUES ('A', 'ANGGERIK', 'NICE');
+INSERT INTO ROOM VALUES ('A001', 'A', 'REGULAR', 4, 4);
+
+INSERT INTO ROOT."SESSION" (SESSIONID, SESSIONNAME, SESSIONSTATUS) 
+	VALUES (20240308, 'MARCH 2024 - AUGUST 2024', 'ACTIVE')
+
+
+
+INSERT INTO PAYMENT (paymentID, paymentStatus) VALUES ('P0000001', 'Completed');
 -- Insert data into the Payment table
 INSERT INTO PAYMENT (paymentID, paymentStatus) VALUES ('P0000001', 'Completed');
 INSERT INTO PAYMENT (paymentID, paymentStatus) VALUES ('P0000002', 'Completed');
