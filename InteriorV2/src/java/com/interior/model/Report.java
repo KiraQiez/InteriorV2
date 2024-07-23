@@ -2,27 +2,27 @@ package com.interior.model;
 
 public class Report {
 
-    private String reportNo;
+    private String reportID;
     private String title;
     private String desc;
     private String status;
 
     public Report() {
-        this.reportNo = "";
+        this.reportID = "";
         this.title = "";
         this.desc = "";
         this.status = "";
     }
 
-    public Report(String reportNo, String title, String desc, String status) {
-        this.reportNo = reportNo;
+    public Report(String reportID, String title, String desc, String status) {
+        this.reportID = reportID;
         this.title = title;
         this.desc = desc;
         this.status = status;
     }
 
-    public String getReportNo() {
-        return reportNo;
+    public String getReportID() {
+        return reportID;
     }
 
     public String getTitle() {
@@ -37,8 +37,8 @@ public class Report {
         return status;
     }
 
-    public void setReportNo(String reportNo) {
-        this.reportNo = reportNo;
+    public void setReportID(String reportID) {
+        this.reportID = reportID;
     }
 
     public void setTitle(String title) {
@@ -54,6 +54,6 @@ public class Report {
     }
 
     public String toString() {
-        return "Report{" + "reportNo=" + reportNo + ", title=" + title + ", desc=" + desc + ", status=" + status + '}';
+        return "Report{" + "reportID=" + reportID + ", title=" + title + ", desc=" + desc + ", status=" + status + '}';
     }
 }

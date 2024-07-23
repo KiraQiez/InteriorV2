@@ -2,8 +2,6 @@ package com.interior.controller;
 
 import com.interior.DAO.UserDAO;
 import com.interior.model.User;
-import com.interior.DAO.UserDAO;
-import com.interior.model.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

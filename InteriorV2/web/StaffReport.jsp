@@ -2,7 +2,7 @@
 <!-- Main Content -->
 <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Report Management</h1>
+        <h1 class="h2">Room Management</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="printPage()">Share</button>
@@ -10,68 +10,73 @@
             </div>
         </div>
     </div>
+
+    <% String message = (String) request.getAttribute("message"); %>
+    <% if (message != null) {%>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%>" role="alert">
+        <%= message%>
+    </div>
+    <% } %>
+
     <div class="card mb-3">
-        <div class="card-header">Booking List</div>
+        <div class="card-header">Report List</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
 
                 <div class="input-group" style="width: 300px;">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search Student" onkeyup="searchStudents()">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search Report" onkeyup="searchReport()">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
                 <div class="input-group" style="width: 300px;">
-                    <select id="statusFilter" class="form-select" onchange="filterStudents()">
+                    <select id="statusFilter" class="form-select" onchange="filterReport()">
                         <option value="">All Status</option>
-                        <option value="APPROVED">Active</option>
-                        <option value="REJECTED">REJECTED</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="REJECTED">Rejected</option>
                         <option value="PENDING">Pending</option>
                     </select>
                 </div>
             </div>
 
-            <sql:query var="book_list" dataSource="${myDatasource}">
-                SELECT * FROM BOOKING B
-                JOIN SESSION S ON B.SESSIONID = S. SESSIONID
-                JOIN STUDENT ST ON B.STDID = ST.STDID
-                ORDER BY B.bookingID 
+            <sql:query var="report_list" dataSource="${myDatasource}">
+                SELECT * FROM REPORT R 
+                JOIN STUDENT ST ON ST.STDID = R.STUDENTID
+                ORDER BY reportID 
             </sql:query>
 
-            <table class="table" id="studentTable">
+            <table class="table" id="reportTable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Booking ID</th>
-                        <th>Session</th>
-                        <th>Student Name</th>
+                        <th>Report ID</th>
+                        <th>Reported by</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:choose>
-                        <c:when test="${empty book_list.rows}">
+                        <c:when test="${empty report_list.rows}">
                             <tr>
-                                <td colspan="7">No booking available.</td>
+                                <td colspan="5">No report available.</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
                             <% int count = 0; %>
-                            <c:forEach var="book" items="${book_list.rows}">
+                            <c:forEach var="report" items="${report_list.rows}">
                                 <tr>
                                     <% count++;%>
                                     <td width="20px"><%= count%></td>
-                                    <td>${book.bookingID}</td>
-                                    <td>${book.sessionName}</td>
-                                    <td>${book.stdName}</td>
+                                    <td>${report.reportID}</td>
+                                    <td>${report.stdName}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${book.bookStatus == 'APPROVED'}">
-                                                <span class="badge bg-success">Approved</span>
+                                            <c:when test="${report.reportStatus == 'COMPLETED'}">
+                                                <span class="badge bg-success">Completed</span>
                                             </c:when>
-                                            <c:when test="${book.bookStatus == 'REJECTED'}">
+                                            <c:when test="${report.reportStatus == 'REJECTED'}">
                                                 <span class="badge bg-danger">Rejected</span>
                                             </c:when>
-                                            <c:when test="${book.bookStatus == 'PENDING'}">
+                                            <c:when test="${report.reportStatus == 'PENDING'}">
                                                 <span class="badge bg-warning">Pending</span>
                                             </c:when>
                                             <c:otherwise>
@@ -80,9 +85,12 @@
                                         </c:choose>
                                     </td>
                                     <td width="150px">
+                                        <button type="button" class="btn btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#viewReportModal" 
+                                                data-id="${report.reportID}" data-title="${report.reportTitle}" data-desc="${report.reportDesc}" 
+                                                data-status="${report.reportStatus}" data-std-id="${report.studentID}" data-bs-toggle="tooltip" title="View">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
-                                        <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -95,7 +103,47 @@
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
         </div>
-    </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="viewReportModal" tabindex="-1" aria-labelledby="viewReportModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewReportModalLabel">View Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="ReportChangeStatusServlet" method="POST">
+                            <input type="hidden" class="form-control" id="stdID" name="stdID">
+                            <div class="mb-3">
+                                <label for="reportID" class="form-label">Report ID</label>
+                                <input type="text" class="form-control" id="reportID" name="reportID" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="reportTitle" class="form-label">Report Title</label>
+                                <input type="text" class="form-control" id="reportTitle" name="reportTitle" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="reportDesc" class="form-label">Report Description</label>
+                                <textarea class="form-control" id="reportDesc" name="reportDesc" rows="3" readonly></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="reportStatus" class="form-label">Report Status</label>
+                                <select class="form-select" id="reportStatus" name="reportStatus">
+                                    <option value="COMPLETED">Completed</option>
+                                    <option value="REJECTED">Rejected</option>
+                                    <option value="PENDING">Pending</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary" value="Save changes">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 </main>
 </div>
 </div>
@@ -103,7 +151,7 @@
 <script>
     let current_page = 1;
     const records_per_page = 10;
-    const rows = document.querySelectorAll("#studentTable tbody tr");
+    const rows = document.querySelectorAll("#reportTable tbody tr");
 
     function changePage(page) {
         const pagination = document.getElementById("pagination");
@@ -165,21 +213,21 @@
         changePage(1);
     };
 
-    function searchStudents() {
+    function searchReport() {
         const input = document.getElementById('searchInput').value.toLowerCase();
         filterStudents(input);
     }
 
-    function filterStudents(input = '') {
+    function filterReport(input = '') {
         const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
 
-        const rows = document.querySelectorAll('#studentTable tbody tr');
+        const rows = document.querySelectorAll('#reportTable tbody tr');
         rows.forEach(row => {
-            const studentName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const studentStatus = row.querySelector('td:nth-child(6) .badge').textContent.toLowerCase();
+            const reportID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const reportStatus = row.querySelector('td:nth-child(4) .badge').textContent.toLowerCase();
 
-            const matchesSearch = studentName.includes(input);
-            const matchesStatus = statusFilter === '' || studentStatus === statusFilter;
+            const matchesSearch = reportID.includes(input);
+            const matchesStatus = statusFilter === '' || reportStatus === statusFilter;
 
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
@@ -188,6 +236,29 @@
             }
         });
     }
+
+    // View Report Modal
+    var viewReportModal = document.getElementById('viewReportModal');
+    viewReportModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var reportID = button.getAttribute('data-id');
+        var reportTitle = button.getAttribute('data-title');
+        var reportDesc = button.getAttribute('data-desc');
+        var reportStatus = button.getAttribute('data-status');
+        var stdID = button.getAttribute('data-std-id');
+
+        var modalID = viewReportModal.querySelector('#reportID');
+        var modalTitle = viewReportModal.querySelector('#reportTitle');
+        var modalDesc = viewReportModal.querySelector('#reportDesc');
+        var modalStatus = viewReportModal.querySelector('#reportStatus');
+        var modalStdID = viewReportModal.querySelector('#stdID');
+
+        modalID.value = reportID;
+        modalTitle.value = reportTitle;
+        modalDesc.value = reportDesc;
+        modalStatus.value = reportStatus;
+        modalStdID.value = stdID;
+    });
 </script>
 </body>
 </html>

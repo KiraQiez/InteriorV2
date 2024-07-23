@@ -12,6 +12,14 @@
         <servlet-name>EditProfileServlet</servlet-name>
         <servlet-class>com.interior.controller.EditProfileServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReportChangeStatusServlet</servlet-name>
+        <servlet-class>com.interior.controller.ReportChangeStatusServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SessionChangeStatusServlet</servlet-name>
+        <servlet-class>com.interior.controller.SessionChangeStatusServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>EditProfileServlet</servlet-name>
         <url-pattern>/EditProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportChangeStatusServlet</servlet-name>
+        <url-pattern>/ReportChangeStatusServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SessionChangeStatusServlet</servlet-name>
+        <url-pattern>/SessionChangeStatusServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
