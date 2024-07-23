@@ -1,9 +1,8 @@
 <%@ include file="StaffHeader.jsp" %>
-
 <!-- Main Content -->
 <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Room Management</h1>
+        <h1 class="h2">Session Management</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="printPage()">Share</button>
@@ -12,62 +11,69 @@
         </div>
     </div>
     <div class="card mb-3">
-        <div class="card-header">Room List</div>
+        <div class="card-header">Session List</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
 
                 <div class="input-group" style="width: 300px;">
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search Room" onkeyup="searchRoom()">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search Session" onkeyup="searchSession()">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-
-                <div class="d-flex ">
-                    <div class="input-group" style="width: 200px;">
-                        <sql:query var="block_list" dataSource="${myDatasource}">
-                            SELECT * FROM BLOCK
-                        </sql:query>
-                        <select id="blockFilter" class="form-select" onchange="filterBlock()">
-                            <option value="">All Block</option>
-                            <c:forEach var="block" items="${block_list.rows}">
-                                <option value="${block.blockID}">${block.blockID}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+                <div class="input-group" style="width: 300px;">
+                    <select id="statusFilter" class="form-select" onchange="filterSession()">
+                        <option value="">All Status</option>
+                        <option value="ACTIVE">Active</option>
+                        <option value="INACTIVE">Inactive</option>
+                    </select>
                 </div>
             </div>
 
-            <sql:query var="room_list" dataSource="${myDatasource}">
-                SELECT * FROM ROOM
+            <sql:query var="session_list" dataSource="${myDatasource}">
+                SELECT * FROM SESSION ORDER BY sessionID
             </sql:query>
 
-            <table class="table" id="roomTable">
+            <table class="table" id="sessionTable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Room ID</th>
-                        <th>Block</th>
+                        <th>Session ID</th>
+                        <th>Session Name</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:choose>
-                        <c:when test="${empty room_list.rows}">
+                        <c:when test="${empty session_list.rows}">
                             <tr>
-                                <td colspan="8">No room available.</td>
+                                <td colspan="7">No session available.</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
                             <% int count = 0; %>
-                            <c:forEach var="room" items="${room_list.rows}">
+                            <c:forEach var="session" items="${session_list.rows}">
                                 <tr>
                                     <% count++;%>
                                     <td width="20px"><%= count%></td>
-                                    <td>${room.roomID}</td>
-                                    <td>${room.blockID}</td>
-                                    <td><img src="rsc/images/pdf-icon.png" width="30px" height="30px"></td>
+                                    <td>${session.sessionID}</td>
+                                    <td>${session.sessionName}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${session.sessionStatus == 'ACTIVE'}">
+                                                <span class="badge bg-success">Active</span>
+                                            </c:when>
+                                            <c:when test="${session.sessionStatus == 'INACTIVE'}">
+                                                <span class="badge bg-danger">Inactive</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge bg-secondary">Unknown</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
                                     <td width="150px">
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
-                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="Download"><i class="fas fa-download"></i></button>
+                                        <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -88,7 +94,7 @@
 <script>
     let current_page = 1;
     const records_per_page = 10;
-    const rows = document.querySelectorAll("#roomTable tbody tr");
+    const rows = document.querySelectorAll("#sessionTable tbody tr");
 
     function changePage(page) {
         const pagination = document.getElementById("pagination");
@@ -150,21 +156,21 @@
         changePage(1);
     };
 
-    function searchRoom() {
+    function searchSession() {
         const input = document.getElementById('searchInput').value.toLowerCase();
-        filterBlock(input);
+        filterSession(input);
     }
 
-    function filterBlock(input = '') {
-        const blockFilter = document.getElementById('blockFilter').value.toLowerCase();
+    function filterSession(input = '') {
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
 
-        const rows = document.querySelectorAll('#roomTable tbody tr');
+        const rows = document.querySelectorAll('#sessionTable tbody tr');
         rows.forEach(row => {
-            const roomNo = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            const block = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            const sessionName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            const sessionStatus = row.querySelector('td:nth-child(4) .badge').textContent.toLowerCase();
 
-            const matchesSearch = roomNo.includes(input);
-            const matchesStatus = blockFilter === '' || block === blockFilter;
+            const matchesSearch = sessionName.includes(input);
+            const matchesStatus = statusFilter === '' || sessionStatus === statusFilter;
 
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';

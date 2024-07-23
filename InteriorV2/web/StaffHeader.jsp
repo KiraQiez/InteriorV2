@@ -120,14 +120,14 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a href="#roomSubMenu" class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" role="button"
-                           aria-expanded="false" aria-controls="roomSubMenu">
+                        <a href="#sessionSubMenu" class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="sessionSubMenu">
                             <div><i class="fas fa-calendar"></i>Session</div>
                             <i class="fas fa-caret-down"></i>
                         </a>
-                        <ul class="nav flex-column collapse submenu" id="roomSubMenu" >
+                        <ul class="nav flex-column collapse submenu" id="sessionSubMenu" >
                             <li class="nav-item">
-                                <a href="StaffSession.jsp" class="nav-link"><i class="fas fa-list-ul"></i>Session</a>
+                                <a href="StaffSession.jsp" class="nav-link"><i class="fas fa-list-ul"></i>Session List</a>
                             </li>
                         </ul>
                     </li>
