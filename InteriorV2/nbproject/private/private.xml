@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/web/MainLogin.jsp</file>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/src/java/com/interior/DAO/UserDAO.java</file>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/web/StudentHomepage.jsp</file>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/web/StaffHeader.jsp</file>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/src/java/com/interior/controller/LoginServlet.java</file>
-            <file>file:/C:/Users/AkiraVI/Desktop/UITM/SEM%204/CSC584/InteriorV2/InteriorV2/web/StudentHeader.jsp</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -10,6 +10,14 @@
             </div>
         </div>
     </div>
+
+    <% String message = (String) request.getAttribute("message"); %>
+    <% if (message != null) {%>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%>" role="alert">
+        <%= message%>
+    </div>
+    <% } %>
+
     <div class="card mb-3">
         <div class="card-header">Session List</div>
         <div class="card-body">
@@ -71,9 +79,17 @@
                                         </c:choose>
                                     </td>
                                     <td width="150px">
-                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
-                                        <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewSessionModal" 
+                                                data-id="${session.sessionID}" data-name="${session.sessionName}" data-desc="${report.reportDesc}" 
+                                                data-status="${session.sessionStatus}"data-bs-toggle="tooltip" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#editSessionModal" 
+                                                data-id="${session.sessionID}" data-name="${session.sessionName}" data-desc="${report.reportDesc}" 
+                                                data-status="${session.sessionStatus}"data-bs-toggle="tooltip" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+<!--                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>-->
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -85,6 +101,71 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
+        </div>
+        <!-- Edit -->
+        <div class="modal fade" id="editSessionModal" tabindex="-1" aria-labelledby="editSessionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editSessionModalLabel">Edit Session</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="SessionChangeStatusServlet" method="POST">
+                            <div class="mb-3">
+                                <label for="sessionID" class="form-label">Session ID</label>
+                                <input type="text" class="form-control" id="sessionID" name="sessionID" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionName" class="form-label">Session Name</label>
+                                <input type="text" class="form-control" id="sessionName" name="sessionName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionStatus" class="form-label">Session Status</label>
+                                <select class="form-select" id="reportStatus" name="sessionStatus">
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="INACTIVE">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary" value="Save changes">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- View Session -->
+        <div class="modal fade" id="viewSessionModal" tabindex="-1" aria-labelledby="viewSessionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewSessionModalLabel">View Report</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="sessionID" class="form-label">Session ID</label>
+                                <input type="text" class="form-control" id="sessionID" name="sessionID" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionName" class="form-label">Session Name</label>
+                                <input type="text" class="form-control" id="sessionName" name="sessionName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionStatus" class="form-label">Session Status</label>
+                                <input type="text" class="form-control" id="sessionStatus" name="sessionStatus" readonly>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -179,6 +260,40 @@
             }
         });
     }
+    
+    // View Session Modal
+    var viewSessionModal = document.getElementById('viewSessionModal');
+    viewSessionModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var sessionID = button.getAttribute('data-id');
+        var sessionName = button.getAttribute('data-name');
+        var sessionStatus = button.getAttribute('data-status');
+        
+        var modalID = viewSessionModal.querySelector('#sessionID');
+        var modalName = viewSessionModal.querySelector('#sessionName');
+        var modalStatus = viewSessionModal.querySelector('#sessionStatus');
+
+        modalID.value = sessionID;
+        modalName.value = sessionName;
+        modalStatus.value = sessionStatus;
+    });
+    
+    // Edit Session Modal
+    var editSessionModal = document.getElementById('editSessionModal');
+    editSessionModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; // Button that triggered the modal
+        var sessionID = button.getAttribute('data-id');
+        var sessionName = button.getAttribute('data-name');
+        var sessionStatus = button.getAttribute('data-status');
+        
+        var modalID = editSessionModal.querySelector('#sessionID');
+        var modalName = editSessionModal.querySelector('#sessionName');
+        var modalStatus = editSessionModal.querySelector('#sessionStatus');
+
+        modalID.value = sessionID;
+        modalName.value = sessionName;
+        modalStatus.value = sessionStatus;
+    });
 </script>
 </body>
 </html>

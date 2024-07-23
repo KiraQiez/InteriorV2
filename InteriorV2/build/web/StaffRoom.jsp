@@ -24,7 +24,7 @@
                 <div class="d-flex ">
                     <div class="input-group" style="width: 200px;">
                         <sql:query var="block_list" dataSource="${myDatasource}">
-                            SELECT * FROM BLOCK
+                            SELECT DISTINCT BLOCKID FROM BLOCK
                         </sql:query>
                         <select id="blockFilter" class="form-select" onchange="filterBlock()">
                             <option value="">All Block</option>
@@ -46,6 +46,9 @@
                         <th>#</th>
                         <th>Room ID</th>
                         <th>Block</th>
+                        <th>Max Capacity</th>
+                        <th>Availability</th>
+<!--                        <th>File</th>-->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -53,7 +56,7 @@
                     <c:choose>
                         <c:when test="${empty room_list.rows}">
                             <tr>
-                                <td colspan="8">No room available.</td>
+                                <td colspan="6">No room available.</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
@@ -64,7 +67,9 @@
                                     <td width="20px"><%= count%></td>
                                     <td>${room.roomID}</td>
                                     <td>${room.blockID}</td>
-                                    <td><img src="rsc/images/pdf-icon.png" width="30px" height="30px"></td>
+                                    <td>${room.maxCapacity}</td>
+                                    <td>${room.availability}</td>
+<!--                                    <td><img src="rsc/images/pdf-icon.png" width="30px" height="30px"></td>-->
                                     <td width="150px">
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="Download"><i class="fas fa-download"></i></button>
