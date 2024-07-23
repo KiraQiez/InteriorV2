@@ -12,6 +12,10 @@
         <servlet-name>StudentUpdate</servlet-name>
         <servlet-class>com.interior.controller.StudentUpdate</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditProfileServlet</servlet-name>
+        <servlet-class>com.interior.controller.EditProfileServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>StudentUpdate</servlet-name>
         <url-pattern>/StudentUpdate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProfileServlet</servlet-name>
+        <url-pattern>/EditProfileServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

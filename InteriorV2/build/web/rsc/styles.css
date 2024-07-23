@@ -44,6 +44,7 @@ body {
 }
 
 .sidebar {
+    
     padding: 15px;
     height: 100vh;
     background-color: #fff;
@@ -98,13 +99,4 @@ body {
     color: #5A5F65;
 }
 
-.card {
-    border: none;
-    border-radius: 10px;
-}
-
-.card-header {
-    background-color: transparent;
-    font-weight: bold;
-}
 
