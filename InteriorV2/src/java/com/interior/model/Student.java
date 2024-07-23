@@ -1,95 +1,113 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.interior.model;
 
-/**
- *
- * @author AkiraVI
- */
 public class Student {
+    private String stdId;
+    private String stdName;
+    private String stdIC;
+    private String stdPhone;
+    private String stdAddress;
+    private double stdIncome;
+    private String stdParentPhoneNum;
+    private String stdStatus;
 
-    private String stdID;
-    private String name;
-    private String phone;
-    private String address;
-    private double income;
-    private String parentPhoneNum;
-
-    // default
     public Student() {
-        this.stdID = "";
-        this.name = "";
-        this.phone = "";
-        this.address = "";
-        this.income = 0;
-        this.parentPhoneNum = "";
+        this.stdId = "";
+        this.stdName = "";
+        this.stdIC = "";
+        this.stdPhone = "";
+        this.stdAddress = "";
+        this.stdIncome = 0.0;
+        this.stdParentPhoneNum = "";
+        this.stdStatus = "";
     }
 
-    // normal
-    public Student(String stdID, String name, String phone, String address, double income, String parentPhoneNum) {
-        this.stdID = stdID;
-        this.name = name;
-        this.phone = phone;
-        this.address = address;
-        this.income = income;
-        this.parentPhoneNum = parentPhoneNum;
+    public Student(String stdId, String stdName, String stdIC, String stdPhone, String stdAddress, double stdIncome, String stdParentPhoneNum, String stdStatus) {
+        this.stdId = stdId;
+        this.stdName = stdName;
+        this.stdIC = stdIC;
+        this.stdPhone = stdPhone;
+        this.stdAddress = stdAddress;
+        this.stdIncome = stdIncome;
+        this.stdParentPhoneNum = stdParentPhoneNum;
+        this.stdStatus = stdStatus;
     }
 
+    // Getters and Setters
+    public String getStdId() {
+        return stdId;
+    }
+
+    public void setStdId(String stdId) {
+        this.stdId = stdId;
+    }
+
+    public String getStdName() {
+        return stdName;
+    }
+
+    public void setStdName(String stdName) {
+        this.stdName = stdName;
+    }
+
+    public String getStdIC() {
+        return stdIC;
+    }
+
+    public void setStdIC(String stdIC) {
+        this.stdIC = stdIC;
+    }
+
+    public String getStdPhone() {
+        return stdPhone;
+    }
+
+    public void setStdPhone(String stdPhone) {
+        this.stdPhone = stdPhone;
+    }
+
+    public String getStdAddress() {
+        return stdAddress;
+    }
+
+    public void setStdAddress(String stdAddress) {
+        this.stdAddress = stdAddress;
+    }
+
+    public double getStdIncome() {
+        return stdIncome;
+    }
+
+    public void setStdIncome(double stdIncome) {
+        this.stdIncome = stdIncome;
+    }
+
+    public String getStdParentPhoneNum() {
+        return stdParentPhoneNum;
+    }
+
+    public void setStdParentPhoneNum(String stdParentPhoneNum) {
+        this.stdParentPhoneNum = stdParentPhoneNum;
+    }
+
+    public String getStdStatus() {
+        return stdStatus;
+    }
+
+    public void setStdStatus(String stdStatus) {
+        this.stdStatus = stdStatus;
+    }
+
+    @Override
     public String toString() {
-        return "Student{" + "stdID=" + stdID + ", name=" + name + ", phone=" + phone + ", address=" + address
-                + ", income=" + income + ", parentPhoneNum=" + parentPhoneNum + '}';
-    }
-
-    // getter
-    public String getStdID() {
-        return stdID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public double getIncome() {
-        return income;
-    }
-
-    public String getParentPhoneNum() {
-        return parentPhoneNum;
-    }
-
-    // setter
-    public void setStdID(String stdID) {
-        this.stdID = stdID;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setIncome(double income) {
-        this.income = income;
-    }
-
-    public void setParentPhoneNum(String parentPhoneNum) {
-        this.parentPhoneNum = parentPhoneNum;
+        return "Student{" +
+                "stdId='" + stdId + '\'' +
+                ", stdName='" + stdName + '\'' +
+                ", stdIC='" + stdIC + '\'' +
+                ", stdPhone='" + stdPhone + '\'' +
+                ", stdAddress='" + stdAddress + '\'' +
+                ", stdIncome=" + stdIncome +
+                ", stdParentPhoneNum='" + stdParentPhoneNum + '\'' +
+                ", stdStatus='" + stdStatus + '\'' +
+                '}';
     }
 }

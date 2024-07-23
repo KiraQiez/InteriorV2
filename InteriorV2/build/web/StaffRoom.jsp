@@ -1,8 +1,9 @@
 <%@ include file="StaffHeader.jsp" %>
-  <!-- Main Content -->
+
+ <!-- Main Content -->
             <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Room Management</h1>
+                    <h1 class="h2">Payment Management</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="btn-group me-2">
                             <button type="button" class="btn btn-sm btn-outline-secondary" onclick="printPage()">Share</button>
@@ -11,59 +12,70 @@
                     </div>
                 </div>
                 <div class="card mb-3">
-                    <div class="card-header">Room List</div>
+                    <div class="card-header">Payment List</div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
                            
                             <div class="input-group" style="width: 300px;">
-                                <input type="text" id="searchInput" class="form-control" placeholder="Search Student" onkeyup="searchStudents()">
+                                <input type="text" id="searchInput" class="form-control" placeholder="Search Payment" onkeyup="searchPayments()">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
-                            <div class="input-group" style="width: 300px;">
-                                <select id="statusFilter" class="form-select" onchange="filterStudents()">
-                                    <option value="">All Status</option>
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
+                            
+                            <div class="d-flex ">
+                            <div class="input-group" style="width: 200px;">
+                                <select id="amountFilter" class="form-select" onchange="filterPayments()">
+                                    <option value="">All Amounts</option>
+                                    <option value="lt1000">Less than 1000</option>
+                                    <option value="btw1000to5000">Between 1000 to 5000</option>
+                                    <option value="gt5000">More than 5000</option>
                                 </select>
+                            </div>
                             </div>
                         </div>
 
-                        <sql:query var="room_list" dataSource="${myDatasource}">
-                            SELECT * FROM ROOM ORDER BY roomID
+                        <sql:query var="payment_list" dataSource="${myDatasource}">
+                            SELECT PAYMENT.paymentID, BILL.billID, STUDENT.stdName, BILL.totalAmount, PAYMENT.paymentDate
+                            FROM PAYMENT
+                            JOIN BILL ON PAYMENT.paymentID = BILL.paymentID
+                            JOIN STUDENT ON BILL.stdID = STUDENT.stdID
+                            ORDER BY PAYMENT.paymentID
                         </sql:query>
 
-                        <table class="table" id="studentTable">
+                        <table class="table" id="paymentTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Room ID</th>
-                                    <th>Block</th>
-                                    <th>Max capacity</th>
-                                    <th>Availability</th>
+                                    <th>Payment ID</th>
+                                    <th>Bill ID</th>
+                                    <th>Student Name</th>
+                                    <th>Amount</th>
+                                    <th>Payment Date</th>
+                                    <th>Receipt</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:choose>
-                                    <c:when test="${empty room_list.rows}">
+                                    <c:when test="${empty payment_list.rows}">
                                         <tr>
-                                            <td colspan="7">No room available.</td>
+                                            <td colspan="8">No payments available.</td>
                                         </tr>
                                     </c:when>
                                     <c:otherwise>
                                         <% int count = 0; %>
-                                        <c:forEach var="room" items="${room_list.rows}">
+                                        <c:forEach var="payment" items="${payment_list.rows}">
                                             <tr>
                                                 <% count++; %>
                                                 <td width="20px"><%= count %></td>
-                                                <td>${room.roomID}</td>
-                                                <td>${room.blockID}</td>
-                                                <td>${room.maxCapacity}</td>
-                                                <td>${room.availability}</td>
+                                                <td>${payment.paymentID}</td>
+                                                <td>${payment.billID}</td>
+                                                <td>${payment.stdName}</td>                                             
+                                                <td>${payment.totalAmount}</td>
+                                                <td>${payment.paymentDate}</td>
+                                                <td><img src="rsc/images/pdf-icon.png" width="30px" height="30px"></td>
                                                 <td width="150px">
                                                     <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></button>
-                                                    <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>
+                                                    <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="Download"><i class="fas fa-download"></i></button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -84,7 +96,7 @@
     <script>
         let current_page = 1;
         const records_per_page = 10;
-        const rows = document.querySelectorAll("#studentTable tbody tr");
+        const rows = document.querySelectorAll("#paymentTable tbody tr");
 
         function changePage(page) {
             const pagination = document.getElementById("pagination");
@@ -144,23 +156,31 @@
             changePage(1);
         };
 
-        function searchStudents() {
+        function searchPayments() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            filterStudents(input);
+            filterPayments(input);
         }
 
-        function filterStudents(input = '') {
-            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+        function filterPayments(input = '') {
+            const amountFilter = document.getElementById('amountFilter').value;
 
-            const rows = document.querySelectorAll('#studentTable tbody tr');
+            const rows = document.querySelectorAll('#paymentTable tbody tr');
             rows.forEach(row => {
-                const studentName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-                const studentStatus = row.querySelector('td:nth-child(6) .badge').textContent.toLowerCase();
+                const amount = parseFloat(row.querySelector('td:nth-child(5)').textContent);
+                const studentName = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
 
                 const matchesSearch = studentName.includes(input);
-                const matchesStatus = statusFilter === '' || studentStatus === statusFilter;
+                let matchesAmount = true;
 
-                if (matchesSearch && matchesStatus) {
+                if (amountFilter === 'lt1000') {
+                    matchesAmount = amount < 1000;
+                } else if (amountFilter === 'btw1000to5000') {
+                    matchesAmount = amount >= 1000 && amount <= 5000;
+                } else if (amountFilter === 'gt5000') {
+                    matchesAmount = amount > 5000;
+                }
+
+                if (matchesSearch && matchesAmount) {
                     row.style.display = '';
                 } else {
                     row.style.display = 'none';

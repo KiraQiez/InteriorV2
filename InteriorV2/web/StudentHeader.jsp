@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 
-<jsp:useBean id="user" scope="request" class="com.interior.model.User" />
+<jsp:useBean id="user" scope="session" class="com.interior.model.User" />
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +63,7 @@
                                 <a class="nav-link d-flex align-items-center" href="#">
                                     <img src="rsc/images/profilePic.png" class="rounded-circle me-2" alt="Profile"
                                         width="40" height="40">
-                                    <%= user.getUsername() %>
+                                        <c:out value="${user.username}" />
                                     <i class="fas fa-ellipsis-v ms-2"></i>
                                 </a>
                             </li>
@@ -78,14 +78,14 @@
                     <img src="rsc/images/profilePic.png" alt="Profile">
                     <div class="profile-info mt-2">
                         <h4>
-                            <%= user.getUsername() %>
+                            <c:out value="${user.username}" />
                         </h4>
                         <p>Student</p>
                     </div>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a href="StaffHomepage.jsp" class="nav-link"><i class="fas fa-home"></i>Home</a>
+                        <a href="StudentHomepage.jsp" class="nav-link"><i class="fas fa-home"></i>Home</a>
                     </li>
                     <li class="nav-item">
                         <a href="StudentProfile.jsp" class="nav-link"><i class="fas fas fa-user-graduate"></i>My Profile</a>
