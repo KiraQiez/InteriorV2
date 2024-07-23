@@ -1,60 +1,61 @@
 package com.interior.model;
 
+import java.sql.Date;
+
 public class Booking {
+    private String bookingID;
+    private Date bookingDate;
+    private String bookstatus;
+    private String stdID;
+    private String roomID;
+    private int sessionID;
 
-    private String ID;
-    private String date;
-    private String checkIn;
-    private String checkOut;
-
-    public Booking() {
-        this.ID = "";
-        this.date = "";
-        this.checkIn = "";
-        this.checkOut = "";
+    // Getters and Setters
+    public String getBookingID() {
+        return bookingID;
     }
 
-    public Booking(String ID, String date, String checkIn, String checkOut) {
-        this.ID = ID;
-        this.date = date;
-        this.checkIn = checkIn;
-        this.checkOut = checkOut;
+    public void setBookingID(String bookingID) {
+        this.bookingID = bookingID;
     }
 
-    public String getID() {
-        return ID;
+    public Date getBookingDate() {
+        return bookingDate;
     }
 
-    public String getDate() {
-        return date;
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
     }
 
-    public String getCheckIn() {
-        return checkIn;
+    public String getBookstatus() {
+        return bookstatus;
     }
 
-    public String getCheckOut() {
-        return checkOut;
+    public void setBookstatus(String bookstatus) {
+        this.bookstatus = bookstatus;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public String getStdID() {
+        return stdID;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStdID(String stdID) {
+        this.stdID = stdID;
     }
 
-    public void setCheckIn(String checkIn) {
-        this.checkIn = checkIn;
+    public String getRoomID() {
+        return roomID;
     }
 
-    public void setCheckOut(String checkOut) {
-        this.checkOut = checkOut;
+    public void setRoomID(String roomID) {
+        this.roomID = roomID;
     }
 
-    public String toString() {
-        return "Booking{" + "ID=" + ID + ", date=" + date + ", checkIn=" + checkIn + ", checkOut=" + checkOut + '}';
+    public int getSessionID() {
+        return sessionID;
     }
 
+    public void setSessionID(int sessionID) {
+        this.sessionID = sessionID;
+    }
 }

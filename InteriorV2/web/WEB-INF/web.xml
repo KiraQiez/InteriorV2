@@ -12,6 +12,14 @@
         <servlet-name>EditProfileServlet</servlet-name>
         <servlet-class>com.interior.controller.EditProfileServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetRoomIDsServlet</servlet-name>
+        <servlet-class>com.interior.controller.GetRoomIDsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddReportServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddReportServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>EditProfileServlet</servlet-name>
         <url-pattern>/EditProfileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetRoomIDsServlet</servlet-name>
+        <url-pattern>/GetRoomIDsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddReportServlet</servlet-name>
+        <url-pattern>/AddReportServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

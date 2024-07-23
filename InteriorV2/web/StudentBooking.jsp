@@ -20,14 +20,237 @@
     
     <div class="card mb-3">
         <div class="card-header">My Bookings</div>
-        <div class="card-body ">
-            
-            
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addBookingModal">Add Booking</button>
+                <div class="d-flex">
+                    <div class="input-group me-2" style="width: 200px;">
+                        <select id="statusFilter" class="form-select" onchange="filterBookings()">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search Booking ID" onkeyup="searchBookings()">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <sql:query var="booking_list" dataSource="${myDatasource}">
+                SELECT BOOKING.bookingID, BOOKING.bookingDate, BOOKING.bookstatus, BOOKING.roomID, SESSION.sessionName
+                FROM BOOKING
+                JOIN SESSION ON BOOKING.SESSIONID = SESSION.SESSIONID
+                WHERE BOOKING.stdID = ?
+                ORDER BY BOOKING.bookingDate DESC
+                <sql:param value="${user.userid}" />
+            </sql:query>
+
+            <table class="table" id="bookingTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Booking ID</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                        <th>Room ID</th>
+                        <th>Session Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:choose>
+                        <c:when test="${empty booking_list.rows}">
+                            <tr>
+                                <td colspan="6">No bookings available.</td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <% int count = 0; %>
+                            <c:forEach var="booking" items="${booking_list.rows}">
+                                <tr>
+                                    <% count++; %>
+                                    <td width="20px"><%= count %></td>
+                                    <td>${booking.bookingID}</td>
+                                    <td>${booking.bookingDate}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${booking.bookstatus == 'Pending'}">
+                                                <span class="badge bg-warning">Pending</span>
+                                            </c:when>
+                                            <c:when test="${booking.bookstatus == 'Accepted'}">
+                                                <span class="badge bg-success">Accepted</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge bg-danger">Rejected</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>${booking.roomID}</td>
+                                    <td>${booking.sessionName}</td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
+                </tbody>
+            </table>
         </div>
     </div>
     
+    <!-- Add Booking Modal -->
+    <div class="modal fade" id="addBookingModal" tabindex="-1" aria-labelledby="addBookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addBookingModalLabel">Add Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="AddBookingServlet" method="post">
+                    <div class="modal-body">
+                  
+                        <div class="mb-3">
+                            <label for="blockID" class="form-label">Block</label>
+                            <select class="form-select" id="blockID" name="blockID" required onchange="loadRoomTypes()">
+                                <option value="">Select Block</option>
+                                <sql:query var="block_list" dataSource="${myDatasource}">
+                                    SELECT blockID, blockName FROM BLOCK
+                                </sql:query>
+                                <c:forEach var="block" items="${block_list.rows}">
+                                    <option value="${block.blockID}">${block.blockID} - ${block.blockName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roomType" class="form-label">Room Type</label>
+                            <select class="form-select" id="roomType" name="roomType" required onchange="loadRoomIDs()">
+                                <option value="">Select Room Type</option>
+                                <option value="Luxury">Luxury</option>
+                                <option value="Deluxe">Deluxe</option>
+                                <option value="Normal">Normal</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roomID" class="form-label">Room ID</label>
+                            <select class="form-select" id="roomID" name="roomID" required>
+                                <option value="">Select Room ID</option>
+                        
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sessionID" class="form-label">Session</label>
+                            <select class="form-select" id="sessionID" name="sessionID" required>
+                                <option value="">Select Session</option>
+                                <sql:query var="session_list" dataSource="${myDatasource}">
+                                    SELECT sessionID, sessionName FROM SESSION WHERE sessionStatus = 'Open'
+                                </sql:query>
+                                <c:forEach var="session" items="${session_list.rows}">
+                                    <option value="${session.sessionID}">${session.sessionName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </main>
 </div>
 </div>
 </body>
 </html>
+
+<script>
+    let current_page = 1;
+    const records_per_page = 10;
+    const rows = document.querySelectorAll("#bookingTable tbody tr");
+
+    function changePage(page) {
+        const pagination = document.getElementById("pagination");
+        if (page < 1) page = 1;
+        if (page > numPages()) page = numPages();
+
+        pagination.innerHTML = "";
+
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].style.display = "none";
+        }
+
+        for (let i = (page - 1) * records_per_page; i < (page * records_per_page) && i < rows.length; i++) {
+            rows[i].style.display = "";
+        }
+
+        if (page === 1) {
+            pagination.innerHTML += '<li class="page-item disabled"><a class="page-link" href="javascript:prevPage();">Previous</a></li>';
+        } else {
+            pagination.innerHTML += '<li class="page-item"><a class="page-link" href="javascript:prevPage();">Previous</a></li>';
+        }
+
+        for (let i = 1; i <= numPages(); i++) {
+            if (i === page) {
+                pagination.innerHTML += '<li class="page-item active"><a class="page-link" href="javascript:changePage(' + i + ');">' + i + '</a></li>';
+            } else {
+                pagination.innerHTML += '<li class="page-item"><a class="page-link" href="javascript:changePage(' + i + ');">' + i + '</a></li>';
+            }
+        }
+
+        if (page === numPages()) {
+            pagination.innerHTML += '<li class="page-item disabled"><a class="page-link" href="javascript:nextPage();">Next</a></li>';
+        } else {
+            pagination.innerHTML += '<li class="page-item"><a class="page-link" href="javascript:nextPage();">Next</a></li>';
+        }
+    }
+
+    function numPages() {
+        return Math.ceil(rows.length / records_per_page);
+    }
+
+    function prevPage() {
+        if (current_page > 1) {
+            current_page--;
+            changePage(current_page);
+        }
+    }
+
+    function nextPage() {
+        if (current_page < numPages()) {
+            current_page++;
+            changePage(current_page);
+        }
+    }
+
+    window.onload = function() {
+        changePage(1);
+    };
+
+    function searchBookings() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        filterBookings(input);
+    }
+
+    function filterBookings(input = '') {
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+
+        const rows = document.querySelectorAll('#bookingTable tbody tr');
+        rows.forEach(row => {
+            const bookingID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const bookingStatus = row.querySelector('td:nth-child(4) .badge').textContent.toLowerCase();
+
+            const matchesSearch = bookingID.includes(input);
+            const matchesStatus = statusFilter === '' || bookingStatus === statusFilter;
+
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+
+
+</script>

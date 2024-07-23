@@ -42,6 +42,8 @@ CREATE TABLE PAYMENT (
 
 
 
+
+
 -- Create the STAFF table
 CREATE TABLE STAFF (
     staffID VARCHAR(8) PRIMARY KEY NOT NULL,
@@ -62,7 +64,6 @@ CREATE TABLE ROOM (
     blockID VARCHAR(2),
     roomType VARCHAR(8),
     maxCapacity INT,
-    availability INT,
     FOREIGN KEY (blockID) REFERENCES BLOCK(blockID)
 );
 
@@ -96,7 +97,7 @@ CREATE TABLE BOOKING (
     bookingDate DATE NOT NULL,
     bookstatus VARCHAR(10) NOT NULL,
     stdID VARCHAR(8) NOT NULL,
-    staffID VARCHAR(8) NOT NULL,
+    staffID VARCHAR(8),
     roomID VARCHAR(8) NOT NULL,
     sessionID INT,
 

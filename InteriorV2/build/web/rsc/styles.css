@@ -100,3 +100,21 @@ body {
 }
 
 
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+}
+
+table,
+th,
+td {
+    border: 1px solid #dee2e6;
+    border-collapse: collapse;
+
+}
+
+.table tbody td {
+    font-size: 14px;
+    color: #555;
+}
