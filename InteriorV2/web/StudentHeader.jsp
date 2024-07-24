@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
 <jsp:useBean id="user" scope="session" class="com.interior.model.User" />
 
 <!DOCTYPE html>
@@ -24,7 +23,7 @@
 
 <body>
     
-     <sql:setDataSource var="myDatasource" driver="org.apache.derby.jdbc.ClientDriver"
+    <sql:setDataSource var="myDatasource" driver="org.apache.derby.jdbc.ClientDriver"
                             url="jdbc:derby://localhost:1527/InteriorDB" user="root" password="root" />
      
     <script>
@@ -88,7 +87,7 @@
                         <a href="StudentHomepage.jsp" class="nav-link"><i class="fas fa-home"></i>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a href="StudentProfile.jsp" class="nav-link"><i class="fas fas fa-user-graduate"></i>My Profile</a>
+                        <a href="StudentProfile.jsp" class="nav-link"><i class="fas fa-user-graduate"></i>My Profile</a>
                     </li>
                     <li class="nav-item">
                         <a href="#roomSubMenu" class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" role="button"
@@ -108,7 +107,20 @@
                             </li>
                         </ul>
                     </li>
-                    
- 
+                    <li class="nav-item">
+                        <a href="#billSubMenu" class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" role="button"
+                           aria-expanded="false" aria-controls="billSubMenu">
+                            <div><i class="fas fa-file-invoice-dollar"></i>Bill Payment</div>
+                            <i class="fas fa-caret-down"></i>
+                        </a>
+                        <ul class="nav flex-column collapse submenu" id="billSubMenu" >
+                            <li class="nav-item">
+                                <a href="StudentBill.jsp" class="nav-link"><i class="fas fa-list-ul"></i>My Bill</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="StudentPayment.jsp" class="nav-link"><i class="fas fa-dollar-sign"></i>Payment</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>

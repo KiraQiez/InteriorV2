@@ -9,8 +9,11 @@ public class Booking {
     private String stdID;
     private String roomID;
     private int sessionID;
+    private String blockID;  // Add this field
+    private String roomType; // Add this field
 
-    // Getters and Setters
+    // Getters and setters for all fields
+
     public String getBookingID() {
         return bookingID;
     }
@@ -57,5 +60,21 @@ public class Booking {
 
     public void setSessionID(int sessionID) {
         this.sessionID = sessionID;
+    }
+
+    public String getBlockID() {
+        return blockID;
+    }
+
+    public void setBlockID(String blockID) {
+        this.blockID = blockID;
+    }
+
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 }

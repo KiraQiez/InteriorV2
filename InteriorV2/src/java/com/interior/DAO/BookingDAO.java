@@ -1,20 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.interior.DAO;
-
-/**
- *
- * @author AkiraVI
- */
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import com.interior.model.Booking;
 import java.sql.ResultSet;
+import com.interior.model.Booking;
 
 public class BookingDAO {
 
@@ -52,11 +42,11 @@ public class BookingDAO {
         ps.close();
 
         if (lastId == null) {
-            return "B001"; // Start with the first ID
+            return "B0000001"; // Start with the first ID
         } else {
             int num = Integer.parseInt(lastId.substring(1));
             num++;
-            return String.format("B%03d", num);
+            return String.format("B%07d", num);
         }
     }
 }

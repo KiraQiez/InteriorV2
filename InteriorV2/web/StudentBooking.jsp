@@ -95,6 +95,9 @@
                     </c:choose>
                 </tbody>
             </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center" id="pagination"></ul>
+            </nav>
         </div>
     </div>
     
@@ -106,12 +109,11 @@
                     <h5 class="modal-title" id="addBookingModalLabel">Add Booking</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="AddBookingServlet" method="post">
+                <form action="AddBookingServlet" method="post" >
                     <div class="modal-body">
-                  
                         <div class="mb-3">
                             <label for="blockID" class="form-label">Block</label>
-                            <select class="form-select" id="blockID" name="blockID" required onchange="loadRoomTypes()">
+                            <select class="form-select" id="blockID" name="blockID" required onchange="loadRoomIDs()">
                                 <option value="">Select Block</option>
                                 <sql:query var="block_list" dataSource="${myDatasource}">
                                     SELECT blockID, blockName FROM BLOCK
@@ -132,14 +134,14 @@
                         </div>
                         <div class="mb-3">
                             <label for="roomID" class="form-label">Room ID</label>
-                            <select class="form-select" id="roomID" name="roomID" required>
+                            <select class="form-select custom-select" id="roomID" name="roomID" required>
                                 <option value="">Select Room ID</option>
-                        
+                                <!-- Room IDs will be dynamically loaded based on selected block and room type -->
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="sessionID" class="form-label">Session</label>
-                            <select class="form-select" id="sessionID" name="sessionID" required>
+                            <select class="form-select " id="sessionID" name="sessionID" required>
                                 <option value="">Select Session</option>
                                 <sql:query var="session_list" dataSource="${myDatasource}">
                                     SELECT sessionID, sessionName FROM SESSION WHERE sessionStatus = 'Open'
@@ -149,6 +151,7 @@
                                 </c:forEach>
                             </select>
                         </div>
+                        <input type="hidden" name="stdID" value="${user.userid}">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -250,6 +253,41 @@
             }
         });
     }
+
+   function loadRoomIDs() {
+    const blockID = document.getElementById('blockID').value;
+    const roomType = document.getElementById('roomType').value;
+
+    console.log("Selected blockID: " + blockID);
+    console.log("Selected roomType: " + roomType);
+
+    if (blockID && roomType) {
+        const params = new URLSearchParams();
+        params.append("blockID", blockID);
+        params.append("roomType", roomType);
+
+        const url = "LoadRoomIDsServlet?" + params.toString();
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error loading room IDs: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const roomIDSelect = document.getElementById('roomID');
+                roomIDSelect.innerHTML = '<option value="">Select Room ID</option>';
+                data.forEach(room => {
+                    roomIDSelect.innerHTML += `<option value="${room.roomID}">${room.roomID}</option>`;
+                });
+                console.log("Room IDs loaded: ", data);
+            })
+            .catch(error => console.error('Error loading room IDs:', error));
+    } else {
+        console.error('Missing blockID or roomType');
+    }
+}
 
 
 

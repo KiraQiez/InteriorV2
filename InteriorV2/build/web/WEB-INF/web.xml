@@ -21,12 +21,16 @@
         <servlet-class>com.interior.controller.SessionChangeStatusServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GetRoomIDsServlet</servlet-name>
-        <servlet-class>com.interior.controller.GetRoomIDsServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>AddReportServlet</servlet-name>
         <servlet-class>com.interior.controller.AddReportServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadRoomIDsServlet</servlet-name>
+        <servlet-class>com.interior.controller.LoadRoomIDsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddBookingServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddBookingServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
@@ -49,12 +53,16 @@
         <url-pattern>/SessionChangeStatusServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GetRoomIDsServlet</servlet-name>
-        <url-pattern>/GetRoomIDsServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>AddReportServlet</servlet-name>
         <url-pattern>/AddReportServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadRoomIDsServlet</servlet-name>
+        <url-pattern>/LoadRoomIDsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddBookingServlet</servlet-name>
+        <url-pattern>/AddBookingServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

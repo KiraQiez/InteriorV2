@@ -2,7 +2,7 @@
 <!-- Main Content -->
 <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Report Management</h1>
+        <h1 class="h2">Bill Management</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="printPage()">Share</button>
@@ -19,113 +19,86 @@
     <% } %>
     
     <div class="card mb-3">
-        <div class="card-header">My Reports</div>
+        <div class="card-header">My Bills</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addReportModal">Add Report</button>
-                <div class="d-flex">
-                    <div class="input-group me-2" style="width: 200px;">
-                        <select id="statusFilter" class="form-select" onchange="filterReports()">
-                            <option value="">All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="Handled">Handled</option>
-                            <option value="Checked">Checked</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="width: 300px;">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search Report ID" onkeyup="searchReports()">
+                <div class="input-group" style="width: 300px;">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search Bill ID" onkeyup="searchBills()">
                         <span class="input-group-text"><i class="fas fa-search"></i></span>
                     </div>
+                <div class="d-flex">
+                    <div class="input-group me-2" style="width: 200px;">
+                    <select id="statusFilter" class="form-select" onchange="filterBills()">
+                        <option value="">All Status</option>
+                        <option value="Unpaid">Unpaid</option>
+                        <option value="Paid">Paid</option>
+                    </select>
+                </div>
+                    
                 </div>
             </div>
 
-            <sql:query var="report_list" dataSource="${myDatasource}">
-                SELECT REPORT.reportID, REPORT.reportTitle, REPORT.reportDesc, REPORT.reportStatus, STAFF.staffName 
-                FROM REPORT
-                LEFT JOIN STAFF ON REPORT.handledByStaffID = STAFF.staffID
-                WHERE REPORT.studentID = ?
-                ORDER BY REPORT.reportID DESC
+            <sql:query var="bill_list" dataSource="${myDatasource}">
+                SELECT BILL.billID, BILL.billType, BILL.totalAmount, BILL.paymentID, STUDENT.stdName 
+                FROM BILL
+                JOIN STUDENT ON BILL.stdID = STUDENT.stdID
+                WHERE BILL.stdID = ?
+                ORDER BY BILL.billID DESC
                 <sql:param value="${user.userid}" />
             </sql:query>
 
-            <table class="table" id="reportTable">
+            <table class="table" id="billTable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Report ID</th>
-                        <th>Title</th>
-                        <th>Description</th>
+                        <th>Bill ID</th>
+                        <th>Bill Type</th>
+                        <th>Amount</th>
                         <th>Status</th>
-                        <th>Managed by</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:choose>
-                        <c:when test="${empty report_list.rows}">
+                        <c:when test="${empty bill_list.rows}">
                             <tr>
-                                <td colspan="6">No reports available.</td>
+                                <td colspan="6">No bills available.</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
                             <% int count = 0; %>
-                            <c:forEach var="report" items="${report_list.rows}">
+                            <c:forEach var="bill" items="${bill_list.rows}">
                                 <tr>
                                     <% count++; %>
                                     <td width="20px"><%= count %></td>
-                                    <td>${report.reportID}</td>
-                                    <td>${report.reportTitle}</td>
-                                    <td>${report.reportDesc}</td>
+                                    <td>${bill.billID}</td>
+                                    <td>${bill.billType}</td>
+                                    <td>${bill.totalAmount}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${report.reportStatus == 'Pending'}">
-                                                <span class="badge bg-warning">Pending</span>
-                                            </c:when>
-                                            <c:when test="${report.reportStatus == 'Handled'}">
-                                                <span class="badge bg-info">Handled</span>
+                                            <c:when test="${bill.paymentID == null}">
+                                                <span class="badge bg-danger">Unpaid</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="badge bg-success">Checked</span>
+                                                <span class="badge bg-success">Paid</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
-                                    <td><c:out value="${report.staffName}" default="-" /></td>
+                                    <td>
+                                        <c:if test="${bill.paymentID == null}">
+                                            <button type="button" class="btn btn-sm btn-primary">Pay Bill</button>
+                                        </c:if>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </c:otherwise>
                     </c:choose>
                 </tbody>
             </table>
+
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
-        </div>
-    </div>
-    
-    <!-- Add Report Modal -->
-    <div class="modal fade" id="addReportModal" tabindex="-1" aria-labelledby="addReportModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addReportModalLabel">Add Report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="AddReportServlet" method="post">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="reportTitle" class="form-label">Report Title</label>
-                            <input type="text" class="form-control" id="reportTitle" name="reportTitle" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="reportDesc" class="form-label">Report Description</label>
-                            <textarea class="form-control" id="reportDesc" name="reportDesc" rows="3" required></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Report</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 </main>
@@ -137,7 +110,7 @@
 <script>
     let current_page = 1;
     const records_per_page = 10;
-    const rows = document.querySelectorAll("#reportTable tbody tr");
+    const rows = document.querySelectorAll("#billTable tbody tr");
 
     function changePage(page) {
         const pagination = document.getElementById("pagination");
@@ -197,21 +170,21 @@
         changePage(1);
     };
 
-    function searchReports() {
+    function searchBills() {
         const input = document.getElementById('searchInput').value.toLowerCase();
-        filterReports(input);
+        filterBills(input);
     }
 
-    function filterReports(input = '') {
+    function filterBills(input = '') {
         const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
 
-        const rows = document.querySelectorAll('#reportTable tbody tr');
+        const rows = document.querySelectorAll('#billTable tbody tr');
         rows.forEach(row => {
-            const reportID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            const reportStatus = row.querySelector('td:nth-child(5) .badge').textContent.toLowerCase();
+            const billID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const billStatus = row.querySelector('td:nth-child(5) .badge').textContent.toLowerCase();
 
-            const matchesSearch = reportID.includes(input);
-            const matchesStatus = statusFilter === '' || reportStatus === statusFilter;
+            const matchesSearch = billID.includes(input);
+            const matchesStatus = statusFilter === '' || billStatus === statusFilter;
 
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
