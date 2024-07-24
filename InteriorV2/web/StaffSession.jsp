@@ -13,10 +13,15 @@
 
     <% String message = (String) request.getAttribute("message"); %>
     <% if (message != null) {%>
-    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%>" role="alert">
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
         <%= message%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    <% } %>
+    <%
+            // Set the message attribute to null after displaying it
+            request.setAttribute("message", null);
+        } %>
+
 
     <div class="card mb-3">
         <div class="card-header">Session List</div>
@@ -27,7 +32,13 @@
                     <input type="text" id="searchInput" class="form-control" placeholder="Search Session" onkeyup="searchSession()">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
+
+
                 <div class="input-group" style="width: 300px;">
+                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#sessionAddModal" 
+                            data-bs-toggle="tooltip" title="Add Session">
+                        <i class="fas fa-plus"></i>
+                    </button>
                     <select id="statusFilter" class="form-select" onchange="filterSession()">
                         <option value="">All Status</option>
                         <option value="ACTIVE">Active</option>
@@ -79,17 +90,17 @@
                                         </c:choose>
                                     </td>
                                     <td width="150px">
-                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewSessionModal" 
+                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#sessionViewModal" 
                                                 data-id="${session.sessionID}" data-name="${session.sessionName}" data-desc="${report.reportDesc}" 
                                                 data-status="${session.sessionStatus}"data-bs-toggle="tooltip" title="View">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#editSessionModal" 
+                                        <button type="button" class="btn btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#sessionEditModal" 
                                                 data-id="${session.sessionID}" data-name="${session.sessionName}" data-desc="${report.reportDesc}" 
                                                 data-status="${session.sessionStatus}"data-bs-toggle="tooltip" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
-<!--                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>-->
+                                        <!--                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>-->
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -102,12 +113,49 @@
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
         </div>
-        <!-- Edit -->
-        <div class="modal fade" id="editSessionModal" tabindex="-1" aria-labelledby="editSessionModalLabel" aria-hidden="true">
+        <!-- Add Session Modal -->
+        <div class="modal fade" id="sessionAddModal" tabindex="-1" aria-labelledby="sessionAddModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editSessionModalLabel">Edit Session</h5>
+                        <h5 class="modal-title" id="sessionAddModalLabel">Add Session</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="AddSessionServlet" method="POST">
+                            <div class="mb-3">
+                                <label for="sessionID" class="form-label">Session ID</label>
+                                <input type="text" class="form-control" id="sessionID" name="sessionID">
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionName" class="form-label">Session Name</label>
+                                <input type="text" class="form-control" id="sessionName" name="sessionName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionStatus" class="form-label">Session Status</label>
+                                <select class="form-select" id="sessionStatus" name="sessionStatus">
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="INACTIVE">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary" value="Submit">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Edit Session Modal -->
+        <div class="modal fade" id="sessionEditModal" tabindex="-1" aria-labelledby="sessionEditModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="sessionEditModalLabel">Edit Session</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -122,7 +170,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="sessionStatus" class="form-label">Session Status</label>
-                                <select class="form-select" id="reportStatus" name="sessionStatus">
+                                <select class="form-select" id="sessionStatus" name="sessionStatus">
                                     <option value="ACTIVE">Active</option>
                                     <option value="INACTIVE">Inactive</option>
                                 </select>
@@ -136,13 +184,13 @@
                 </div>
             </div>
         </div>
-        
-        <!-- View Session -->
-        <div class="modal fade" id="viewSessionModal" tabindex="-1" aria-labelledby="viewSessionModalLabel" aria-hidden="true">
+
+        <!-- View Session Modal -->
+        <div class="modal fade" id="sessionViewModal" tabindex="-1" aria-labelledby="sessionViewModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="viewSessionModalLabel">View Report</h5>
+                        <h5 class="modal-title" id="sessionViewModalLabel">View Session</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -167,7 +215,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </main>
 </div>
 </div>
@@ -260,35 +307,33 @@
             }
         });
     }
-    
-    // View Session Modal
-    var viewSessionModal = document.getElementById('viewSessionModal');
-    viewSessionModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Button that triggered the modal
+
+    var sessionViewModal = document.getElementById('sessionViewModal');
+    sessionViewModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
         var sessionID = button.getAttribute('data-id');
         var sessionName = button.getAttribute('data-name');
         var sessionStatus = button.getAttribute('data-status');
-        
-        var modalID = viewSessionModal.querySelector('#sessionID');
-        var modalName = viewSessionModal.querySelector('#sessionName');
-        var modalStatus = viewSessionModal.querySelector('#sessionStatus');
+
+        var modalID = sessionViewModal.querySelector('#sessionID');
+        var modalName = sessionViewModal.querySelector('#sessionName');
+        var modalStatus = sessionViewModal.querySelector('#sessionStatus');
 
         modalID.value = sessionID;
         modalName.value = sessionName;
         modalStatus.value = sessionStatus;
     });
-    
-    // Edit Session Modal
-    var editSessionModal = document.getElementById('editSessionModal');
-    editSessionModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Button that triggered the modal
+
+    var sessionEditModal = document.getElementById('sessionEditModal');
+    sessionEditModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
         var sessionID = button.getAttribute('data-id');
         var sessionName = button.getAttribute('data-name');
         var sessionStatus = button.getAttribute('data-status');
-        
-        var modalID = editSessionModal.querySelector('#sessionID');
-        var modalName = editSessionModal.querySelector('#sessionName');
-        var modalStatus = editSessionModal.querySelector('#sessionStatus');
+
+        var modalID = sessionEditModal.querySelector('#sessionID');
+        var modalName = sessionEditModal.querySelector('#sessionName');
+        var modalStatus = sessionEditModal.querySelector('#sessionStatus');
 
         modalID.value = sessionID;
         modalName.value = sessionName;

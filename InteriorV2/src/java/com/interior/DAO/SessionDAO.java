@@ -31,4 +31,21 @@ public class SessionDAO {
             return false;
         }
     }
+    
+    public boolean insertNewSession(Session ssn) {
+        String query = "INSERT INTO SESSION(SESSIONID, SESSIONNAME, SESSIONSTATUS) VALUES (?,?,?)";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setInt(1, ssn.getSessionID());
+            ps.setString(2, ssn.getSessionName());
+            ps.setString(3, ssn.getSessionStatus());
+            boolean rowUpdated = ps.executeUpdate() > 0;
+            return rowUpdated;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

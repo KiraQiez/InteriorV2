@@ -28,6 +28,14 @@
         <servlet-name>AddReportServlet</servlet-name>
         <servlet-class>com.interior.controller.AddReportServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddSessionServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddSessionServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditBookingServlet</servlet-name>
+        <servlet-class>com.interior.controller.EditBookingServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -55,6 +63,14 @@
     <servlet-mapping>
         <servlet-name>AddReportServlet</servlet-name>
         <url-pattern>/AddReportServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddSessionServlet</servlet-name>
+        <url-pattern>/AddSessionServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditBookingServlet</servlet-name>
+        <url-pattern>/EditBookingServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
