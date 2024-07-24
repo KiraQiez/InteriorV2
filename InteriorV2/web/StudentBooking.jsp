@@ -13,11 +13,11 @@
 
     <% String message = (String) request.getAttribute("message"); %>
     <% if (message != null) {%>
-    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%>" role="alert">
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
         <%= message%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <% } %>
-
     <div class="card mb-3">
         <div class="card-header">My Bookings</div>
         <div class="card-body">
@@ -76,11 +76,11 @@
                                     <td>${booking.bookingDate}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${booking.bookstatus == 'Pending'}">
+                                            <c:when test="${booking.bookstatus == 'PENDING'}">
                                                 <span class="badge bg-warning">Pending</span>
                                             </c:when>
-                                            <c:when test="${booking.bookstatus == 'Accepted'}">
-                                                <span class="badge bg-success">Accepted</span>
+                                            <c:when test="${booking.bookstatus == 'APPROVED'}">
+                                                <span class="badge bg-success">Approved</span>
                                             </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-danger">Rejected</span>
@@ -141,10 +141,19 @@
                         </div>
                         <div class="mb-3">
                             <label for="sessionID" class="form-label">Session</label>
-                            <select class="form-select " id="sessionID" name="sessionID" required>
+
+                            <select class="form-select" id="sessionID" name="sessionID" required>
                                 <option value="">Select Session</option>
                                 <sql:query var="session_list" dataSource="${myDatasource}">
-                                    SELECT sessionID, sessionName FROM SESSION WHERE sessionStatus = 'ACTIVE'
+                                    <sql:param value="${user.userid}" />
+                                    SELECT sessionID, sessionName
+                                    FROM SESSION
+                                    WHERE sessionStatus = 'ACTIVE'
+                                    AND sessionID NOT IN (
+                                    SELECT sessionID
+                                    FROM BOOKING
+                                    WHERE stdID = ?
+                                    )
                                 </sql:query>
                                 <c:forEach var="session" items="${session_list.rows}">
                                     <option value="${session.sessionID}">${session.sessionName}</option>
@@ -171,16 +180,13 @@
     let current_page = 1;
     const records_per_page = 10;
     const rows = document.querySelectorAll("#bookingTable tbody tr");
-
     function changePage(page) {
         const pagination = document.getElementById("pagination");
         if (page < 1)
             page = 1;
         if (page > numPages())
             page = numPages();
-
         pagination.innerHTML = "";
-
         for (let i = 0; i < rows.length; i++) {
             rows[i].style.display = "none";
         }
@@ -231,7 +237,6 @@
     window.onload = function () {
         changePage(1);
     };
-
     function searchBookings() {
         const input = document.getElementById('searchInput').value.toLowerCase();
         filterBookings(input);
@@ -239,15 +244,12 @@
 
     function filterBookings(input = '') {
         const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-
         const rows = document.querySelectorAll('#bookingTable tbody tr');
         rows.forEach(row => {
             const bookingID = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
             const bookingStatus = row.querySelector('td:nth-child(4) .badge').textContent.toLowerCase();
-
             const matchesSearch = bookingID.includes(input);
             const matchesStatus = statusFilter === '' || bookingStatus === statusFilter;
-
             if (matchesSearch && matchesStatus) {
                 row.style.display = '';
             } else {
@@ -259,17 +261,13 @@
     function loadRoomIDs() {
         const blockID = document.getElementById('blockID').value;
         const roomType = document.getElementById('roomType').value;
-
         console.log("Selected blockID: " + blockID);
         console.log("Selected roomType: " + roomType);
-
         if (blockID && roomType) {
             const params = new URLSearchParams();
             params.append("blockID", blockID);
             params.append("roomType", roomType);
-
             const url = "LoadRoomIDsServlet?" + params.toString();
-
             fetch(url)
                     .then(response => {
                         if (!response.ok) {
@@ -291,18 +289,6 @@
         }
     }
 
-//    function fetchRoom() {
-//        var blockID = document.getElementById("blockID").value;
-//        var xmlhttp = new XMLHttpRequest();
-//        xmlhttp.onreadystatechange = function () {
-//            if (this.readyState == 4 && this.status == 200) {
-//                document.getElementById("roomID").innerHTML = this.responseText;
-//            }
-//        };
-//        xmlhttp.open("GET", "fetchRoom.jsp?blockID=" + blockID, true);
-//        xmlhttp.send();
-//    }
-
     function fetchRoom() {
         var blockID = document.getElementById("blockID").value;
         var roomType = document.getElementById("roomType").value;
@@ -320,5 +306,4 @@
 
     document.getElementById("blockID").addEventListener("change", fetchRoom);
     document.getElementById("roomType").addEventListener("change", fetchRoom);
-
 </script>

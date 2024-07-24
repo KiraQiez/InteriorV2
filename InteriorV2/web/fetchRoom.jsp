@@ -1,12 +1,5 @@
-<%-- 
-    Document   : fetchRoom
-    Created on : Jul 24, 2024, 8:28:05 PM
-    Author     : Iqmal
---%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
-<%@ page import="javax.servlet.http.HttpSession" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,6 +14,8 @@
             Connection conn = null;
             PreparedStatement pstmt = null;
             ResultSet rs = null;
+
+            StringBuilder options = new StringBuilder();
 
             try {
                 String driver = "org.apache.derby.jdbc.ClientDriver";
@@ -37,19 +32,25 @@
                 pstmt.setString(2, roomType);
                 rs = pstmt.executeQuery();
 
-                StringBuilder options = new StringBuilder();
+                boolean hasRooms = false;
+
                 while (rs.next()) {
+                    hasRooms = true;
                     options.append("<option value=\"").append(rs.getString("ROOMID")).append("\">")
                             .append(rs.getString("ROOMID")).append(" - ")
                             .append(rs.getInt("AVAILABILITY")).append(" Slot(s) left")
                             .append("</option>");
                 }
 
-                out.println(options.toString());
+                if (!hasRooms) {
+                    options.append("<option value=\"\">No Option Available</option>");
+                }
             } catch (SQLException sqle) {
-                out.println(sqle.getMessage());
+                options.setLength(0); // Clear previous content
+                options.append("<option value=\"\">Error: ").append(sqle.getMessage()).append("</option>");
             } catch (Exception e) {
-                out.println(e.getMessage());
+                options.setLength(0); // Clear previous content
+                options.append("<option value=\"\">Error: ").append(e.getMessage()).append("</option>");
             } finally {
                 try {
                     if (rs != null) {
@@ -62,11 +63,12 @@
                         conn.close();
                     }
                 } catch (SQLException ex) {
-                    out.println(ex.getMessage());
+                    options.setLength(0); // Clear previous content
+                    options.append("<option value=\"\">Error: ").append(ex.getMessage()).append("</option>");
                 }
             }
+
+            out.println(options.toString());
         %>
     </body>
-
 </html>
-
