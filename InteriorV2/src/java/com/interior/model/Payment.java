@@ -1,71 +1,52 @@
 package com.interior.model;
 
+import java.util.Date;
+
 public class Payment {
+    private String paymentID;
+    private String billID;
+    private String studentName;
+    private int totalAmount;
+    private Date paymentDate;
 
-    private String paymentNo;
-    private String date;
-    private String remark;
-    private double totalPrice;
-    private String status;
-
-    public Payment() {
-        this.paymentNo = "";
-        this.date = "";
-        this.remark = "";
-        this.totalPrice = 0;
-        this.status = "";
+    // Getters and setters
+    public String getPaymentID() {
+        return paymentID;
     }
 
-    public Payment(String paymentNo, String date, String remark, double totalPrice, String status) {
-        this.paymentNo = paymentNo;
-        this.date = date;
-        this.remark = remark;
-        this.totalPrice = totalPrice;
-        this.status = status;
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
     }
 
-    public String getPaymentNo() {
-        return paymentNo;
+    public String getBillID() {
+        return billID;
     }
 
-    public String getDate() {
-        return date;
+    public void setBillID(String billID) {
+        this.billID = billID;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getStudentName() {
+        return studentName;
     }
 
-    public double getTotalPrice() {
-        return totalPrice;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
-    public String getStatus() {
-        return status;
+    public int getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setPaymentNo(String paymentNo) {
-        this.paymentNo = paymentNo;
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public Date getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String toString() {
-        return "Payment{" + "paymentNo=" + paymentNo + ", date=" + date + ", remark=" + remark + ", totalPrice="
-                + totalPrice + ", status=" + status + '}';
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
     }
 }

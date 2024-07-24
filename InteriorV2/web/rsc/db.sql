@@ -37,7 +37,8 @@ CREATE TABLE BILL (
 
 CREATE TABLE PAYMENT (
     paymentID VARCHAR(8) PRIMARY KEY NOT NULL,
-    paymentStatus VARCHAR(255) NOT NULL
+    paymentStatus VARCHAR(255) NOT NULL,
+    paymentdate date
 );
 
 

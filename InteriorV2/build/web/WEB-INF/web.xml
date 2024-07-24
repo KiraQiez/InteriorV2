@@ -92,6 +92,10 @@
         <servlet-name>DeleteBlockServlet</servlet-name>
         <servlet-class>com.interior.controller.DeleteBlockServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DownloadReceipt</servlet-name>
+        <servlet-class>com.interior.controller.DownloadReceipt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -183,6 +187,10 @@
     <servlet-mapping>
         <servlet-name>DeleteBlockServlet</servlet-name>
         <url-pattern>/DeleteBlockServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadReceipt</servlet-name>
+        <url-pattern>/DownloadReceipt</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
