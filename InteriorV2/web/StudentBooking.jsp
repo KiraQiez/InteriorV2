@@ -10,14 +10,14 @@
             </div>
         </div>
     </div>
-    
+
     <% String message = (String) request.getAttribute("message"); %>
-    <% if (message != null) { %>
-        <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger" %>" role="alert">
-            <%= message %>
-        </div>
+    <% if (message != null) {%>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%>" role="alert">
+        <%= message%>
+    </div>
     <% } %>
-    
+
     <div class="card mb-3">
         <div class="card-header">My Bookings</div>
         <div class="card-body">
@@ -70,8 +70,8 @@
                             <% int count = 0; %>
                             <c:forEach var="booking" items="${booking_list.rows}">
                                 <tr>
-                                    <% count++; %>
-                                    <td width="20px"><%= count %></td>
+                                    <% count++;%>
+                                    <td width="20px"><%= count%></td>
                                     <td>${booking.bookingID}</td>
                                     <td>${booking.bookingDate}</td>
                                     <td>
@@ -100,7 +100,7 @@
             </nav>
         </div>
     </div>
-    
+
     <!-- Add Booking Modal -->
     <div class="modal fade" id="addBookingModal" tabindex="-1" aria-labelledby="addBookingModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -113,7 +113,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="blockID" class="form-label">Block</label>
-                            <select class="form-select" id="blockID" name="blockID" required onchange="loadRoomIDs()">
+                            <select class="form-select" id="blockID" name="blockID" required>
                                 <option value="">Select Block</option>
                                 <sql:query var="block_list" dataSource="${myDatasource}">
                                     SELECT blockID, blockName FROM BLOCK
@@ -125,18 +125,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="roomType" class="form-label">Room Type</label>
-                            <select class="form-select" id="roomType" name="roomType" required onchange="loadRoomIDs()">
+                            <select class="form-select" id="roomType" name="roomType" required>
                                 <option value="">Select Room Type</option>
-                                <option value="Luxury">Luxury</option>
-                                <option value="Deluxe">Deluxe</option>
-                                <option value="Normal">Normal</option>
+                                <option value="LUXURY">Luxury</option>
+                                <option value="DELUXE">Deluxe</option>
+                                <option value="NORMAL">Normal</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="roomID" class="form-label">Room ID</label>
+                            <label for="roomID" class="form-label">Room ID:</label>
                             <select class="form-select custom-select" id="roomID" name="roomID" required>
                                 <option value="">Select Room ID</option>
-                                <!-- Room IDs will be dynamically loaded based on selected block and room type -->
+                                <!-- Room options will be populated here by AJAX -->
                             </select>
                         </div>
                         <div class="mb-3">
@@ -144,7 +144,7 @@
                             <select class="form-select " id="sessionID" name="sessionID" required>
                                 <option value="">Select Session</option>
                                 <sql:query var="session_list" dataSource="${myDatasource}">
-                                    SELECT sessionID, sessionName FROM SESSION WHERE sessionStatus = 'Open'
+                                    SELECT sessionID, sessionName FROM SESSION WHERE sessionStatus = 'ACTIVE'
                                 </sql:query>
                                 <c:forEach var="session" items="${session_list.rows}">
                                     <option value="${session.sessionID}">${session.sessionName}</option>
@@ -174,8 +174,10 @@
 
     function changePage(page) {
         const pagination = document.getElementById("pagination");
-        if (page < 1) page = 1;
-        if (page > numPages()) page = numPages();
+        if (page < 1)
+            page = 1;
+        if (page > numPages())
+            page = numPages();
 
         pagination.innerHTML = "";
 
@@ -226,7 +228,7 @@
         }
     }
 
-    window.onload = function() {
+    window.onload = function () {
         changePage(1);
     };
 
@@ -254,41 +256,69 @@
         });
     }
 
-   function loadRoomIDs() {
-    const blockID = document.getElementById('blockID').value;
-    const roomType = document.getElementById('roomType').value;
+    function loadRoomIDs() {
+        const blockID = document.getElementById('blockID').value;
+        const roomType = document.getElementById('roomType').value;
 
-    console.log("Selected blockID: " + blockID);
-    console.log("Selected roomType: " + roomType);
+        console.log("Selected blockID: " + blockID);
+        console.log("Selected roomType: " + roomType);
 
-    if (blockID && roomType) {
-        const params = new URLSearchParams();
-        params.append("blockID", blockID);
-        params.append("roomType", roomType);
+        if (blockID && roomType) {
+            const params = new URLSearchParams();
+            params.append("blockID", blockID);
+            params.append("roomType", roomType);
 
-        const url = "LoadRoomIDsServlet?" + params.toString();
+            const url = "LoadRoomIDsServlet?" + params.toString();
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error loading room IDs: ${response.statusText}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const roomIDSelect = document.getElementById('roomID');
-                roomIDSelect.innerHTML = '<option value="">Select Room ID</option>';
-                data.forEach(room => {
-                    roomIDSelect.innerHTML += `<option value="${room.roomID}">${room.roomID}</option>`;
-                });
-                console.log("Room IDs loaded: ", data);
-            })
-            .catch(error => console.error('Error loading room IDs:', error));
-    } else {
-        console.error('Missing blockID or roomType');
+            fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error loading room IDs: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const roomIDSelect = document.getElementById('roomID');
+                        roomIDSelect.innerHTML = '<option value="">Select Room ID</option>';
+                        data.forEach(room => {
+                            roomIDSelect.innerHTML += `<option value="${room.roomID}">${room.roomID}</option>`;
+                        });
+                        console.log("Room IDs loaded: ", data);
+                    })
+                    .catch(error => console.error('Error loading room IDs:', error));
+        } else {
+            console.error('Missing blockID or roomType');
+        }
     }
-}
 
+//    function fetchRoom() {
+//        var blockID = document.getElementById("blockID").value;
+//        var xmlhttp = new XMLHttpRequest();
+//        xmlhttp.onreadystatechange = function () {
+//            if (this.readyState == 4 && this.status == 200) {
+//                document.getElementById("roomID").innerHTML = this.responseText;
+//            }
+//        };
+//        xmlhttp.open("GET", "fetchRoom.jsp?blockID=" + blockID, true);
+//        xmlhttp.send();
+//    }
 
+    function fetchRoom() {
+        var blockID = document.getElementById("blockID").value;
+        var roomType = document.getElementById("roomType").value;
+        if (blockID && roomType) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("roomID").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "fetchRoom.jsp?blockID=" + blockID + "&roomType=" + roomType, true);
+            xmlhttp.send();
+        }
+    }
+
+    document.getElementById("blockID").addEventListener("change", fetchRoom);
+    document.getElementById("roomType").addEventListener("change", fetchRoom);
 
 </script>
