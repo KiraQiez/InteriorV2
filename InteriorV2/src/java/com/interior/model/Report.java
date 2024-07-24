@@ -6,19 +6,25 @@ public class Report {
     private String title;
     private String desc;
     private String status;
+    private String handledByStaffID;
+    private String checkedByStaffID;
 
     public Report() {
         this.reportID = "";
         this.title = "";
         this.desc = "";
         this.status = "";
+        this.handledByStaffID = "";
+        this.checkedByStaffID = "";
     }
 
-    public Report(String reportID, String title, String desc, String status) {
+    public Report(String reportID, String title, String desc, String status, String handledByStaffID, String checkedByStaffID) {
         this.reportID = reportID;
         this.title = title;
         this.desc = desc;
         this.status = status;
+        this.handledByStaffID = handledByStaffID;
+        this.checkedByStaffID = checkedByStaffID;
     }
 
     public String getReportID() {
@@ -33,8 +39,16 @@ public class Report {
         return desc;
     }
 
-    public String getStatus() {
+    public String getReportStatus() {
         return status;
+    }
+
+    public String getHandledByStaffID() {
+        return handledByStaffID;
+    }
+
+    public String getCheckedByStaffID() {
+        return checkedByStaffID;
     }
 
     public void setReportID(String reportID) {
@@ -49,11 +63,27 @@ public class Report {
         this.desc = desc;
     }
 
-    public void setStatus(String status) {
+    public void setReportStatus(String status) {
         this.status = status;
     }
 
+    public void setHandledByStaffID(String handledByStaffID) {
+        this.handledByStaffID = handledByStaffID;
+    }
+
+    public void setCheckedByStaffID(String checkedByStaffID) {
+        this.checkedByStaffID = checkedByStaffID;
+    }
+
+    @Override
     public String toString() {
-        return "Report{" + "reportID=" + reportID + ", title=" + title + ", desc=" + desc + ", status=" + status + '}';
+        return "Report{" +
+                "reportID='" + reportID + '\'' +
+                ", title='" + title + '\'' +
+                ", desc='" + desc + '\'' +
+                ", status='" + status + '\'' +
+                ", handledByStaffID='" + handledByStaffID + '\'' +
+                ", checkedByStaffID='" + checkedByStaffID + '\'' +
+                '}';
     }
 }

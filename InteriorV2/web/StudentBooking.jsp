@@ -79,8 +79,8 @@
                                             <c:when test="${booking.bookstatus == 'Pending'}">
                                                 <span class="badge bg-warning">Pending</span>
                                             </c:when>
-                                            <c:when test="${booking.bookstatus == 'Accepted'}">
-                                                <span class="badge bg-success">Accepted</span>
+                                            <c:when test="${booking.bookstatus == 'Approved'}">
+                                                <span class="badge bg-success">Approved</span>
                                             </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-danger">Rejected</span>

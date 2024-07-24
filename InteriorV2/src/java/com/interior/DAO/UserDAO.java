@@ -91,21 +91,21 @@ public class UserDAO {
                 throw new Exception("Username or Email already exists");
             }
 
-            String sql = "INSERT INTO USERS (userid, email, username, password, usertype, profileimage) VALUES(?,?,?,?,?,?)";
+            String sql = "INSERT INTO USERS (userid, email, username, password, usertype) VALUES(?,?,?,?,?)";
 
             String email = user.getEmail();
             String username = user.getUsername();
             String password = user.getPassword();
             String usertype = user.getUsertype();
             String userId = generateUserId(con);
-            String image = user.getUserImage();  
+
             ps = con.prepareStatement(sql);
             ps.setString(1, userId);
             ps.setString(2, email);
             ps.setString(3, username);
             ps.setString(4, password);
             ps.setString(5, usertype);
-            ps.setString(6, image);
+         
 
             int i = ps.executeUpdate();
             if (i > 0) {
@@ -128,25 +128,26 @@ public class UserDAO {
     }
 
     private String generateUserId(Connection con) throws Exception {
-        String sql = "SELECT userid FROM USERS ORDER BY userid DESC FETCH FIRST ROW ONLY";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
+    String sql = "SELECT userid FROM USERS ORDER BY userid DESC FETCH FIRST ROW ONLY";
+    PreparedStatement ps = con.prepareStatement(sql);
+    ResultSet rs = ps.executeQuery();
 
-        String lastId = null;
-        if (rs.next()) {
-            lastId = rs.getString("userid");
-        }
-        rs.close();
-        ps.close();
-
-        if (lastId == null) {
-            return "U001"; // Start with the first ID
-        } else {
-            int num = Integer.parseInt(lastId.substring(1));
-            num++;
-            return String.format("U%03d", num);
-        }
+    String lastId = null;
+    if (rs.next()) {
+        lastId = rs.getString("userid");
     }
+    rs.close();
+    ps.close();
+
+    if (lastId == null) {
+        return "U0000001"; // Start with the first ID
+    } else {
+        int num = Integer.parseInt(lastId.substring(1));
+        num++;
+        return String.format("U%07d", num);
+    }
+}
+
 
     private boolean checkIfUserExists(Connection con, String username, String email) throws Exception {
         String sql = "SELECT COUNT(*) FROM USERS WHERE username = ? OR email = ?";
@@ -164,4 +165,64 @@ public class UserDAO {
 
         return exists;
     }
+     public boolean updateUser(User user) {
+        boolean status = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+
+        try {
+            con = DBConnection.getConnection();
+            String sql = "UPDATE USERS SET username = ?, email = ?, password = ?, userType = ? WHERE userID = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getUsertype());
+            ps.setString(5, user.getUserid());
+
+            int i = ps.executeUpdate();
+            if (i > 0) {
+                status = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return status;
+    }
+
+public boolean deleteUser(String userID) {
+    boolean status = false;
+    Connection con = null;
+    PreparedStatement ps = null;
+
+    try {
+        con = DBConnection.getConnection();
+        String sql = "DELETE FROM USERS WHERE userid = ?";
+        ps = con.prepareStatement(sql);
+        ps.setString(1, userID);
+
+        int i = ps.executeUpdate();
+        if (i > 0) {
+            status = true;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    return status;
+}
+
 }

@@ -31,9 +31,27 @@ public class StudentDAO {
         }
     }
 
-    // Method to get student info based on userId
+    
+     public boolean updateStudentStatus(String studentID, String status) {
+        String query = "UPDATE STUDENT SET stdStatus = ? WHERE stdID = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, status);
+            ps.setString(2, studentID);
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+     
     public Student getStudentById(int userId) {
-        String query = "SELECT * FROM STUDENT WHERE STDID = ?";
+        String query = "SELECT * FROM STUDENT WHERE stdID = ?";
         Student student = null;
         
         try (Connection con = DBConnection.getConnection();
@@ -44,14 +62,14 @@ public class StudentDAO {
             
             if (rs.next()) {
                 student = new Student();
-                student.setStdId(rs.getString("stdid"));
+                student.setStdId(rs.getString("stdID"));
                 student.setStdName(rs.getString("stdName"));
-                student.setStdIC(rs.getString("stdic"));
-                student.setStdPhone(rs.getString("stdphone"));
-                student.setStdAddress(rs.getString("stdaddress"));
-                student.setStdIncome(rs.getDouble("stdincome"));
-                student.setStdParentPhoneNum(rs.getString("stdparentphonenum"));
-                student.setStdStatus(rs.getString("stdstatus"));
+                student.setStdIC(rs.getString("stdIC"));
+                student.setStdPhone(rs.getString("stdPhone"));
+                student.setStdAddress(rs.getString("stdAddress"));
+                student.setStdIncome(rs.getDouble("stdIncome"));
+                student.setStdParentPhoneNum(rs.getString("stdParentPhoneNum"));
+                student.setStdStatus(rs.getString("stdStatus"));
             }
             rs.close();
         } catch (SQLException e) {

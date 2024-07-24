@@ -2,7 +2,7 @@
 <!-- Main Content -->
 <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Room Management</h1>
+        <h1 class="h2">Booking Management</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="printPage()">Share</button>
@@ -15,14 +15,6 @@
     <% if (message != null) {%>
     <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
         <%= message%>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <% } %>
-
-    <% String billMessage = (String) request.getAttribute("billMessage"); %>
-    <% if (billMessage != null) {%>
-    <div class="alert <%= billMessage.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
-        <%= billMessage%>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <% } %>
@@ -40,17 +32,18 @@
                 <div class="input-group" style="width: 300px;">
                     <select id="statusFilter" class="form-select" onchange="filterStudents()">
                         <option value="">All Status</option>
-                        <option value="APPROVED">Active</option>
-                        <option value="REJECTED">REJECTED</option>
-                        <option value="PENDING">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Pending">Pending</option>
                     </select>
                 </div>
             </div>
 
             <sql:query var="book_list" dataSource="${myDatasource}">
-                SELECT * FROM BOOKING B
-                JOIN SESSION S ON B.SESSIONID = S. SESSIONID
-                JOIN STUDENT ST ON B.STDID = ST.STDID
+                SELECT B.bookingID, S.sessionName, ST.stdName, ST.stdIncome, B.bookstatus, B.roomID
+                FROM BOOKING B
+                JOIN SESSION S ON B.sessionID = S.sessionID
+                JOIN STUDENT ST ON B.stdID = ST.stdID
                 ORDER BY B.bookingID 
             </sql:query>
 
@@ -83,13 +76,13 @@
                                     <td>${book.stdName}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${book.bookStatus == 'APPROVED'}">
+                                            <c:when test="${book.bookstatus == 'Approved'}">
                                                 <span class="badge bg-success">Approved</span>
                                             </c:when>
-                                            <c:when test="${book.bookStatus == 'REJECTED'}">
+                                            <c:when test="${book.bookstatus == 'Rejected'}">
                                                 <span class="badge bg-danger">Rejected</span>
                                             </c:when>
-                                            <c:when test="${book.bookStatus == 'PENDING'}">
+                                            <c:when test="${book.bookstatus == 'Pending'}">
                                                 <span class="badge bg-warning">Pending</span>
                                             </c:when>
                                             <c:otherwise>
@@ -100,15 +93,17 @@
                                     <td width="150px">
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#bookingViewModal" 
                                                 data-book-id="${book.bookingID}" data-ssn-name="${book.sessionName}" data-std-id="${book.stdID}" data-std-name="${book.stdName}" 
-                                                data-std-income="${book.stdIncome}" data-book-status="${book.bookStatus}" data-bs-toggle="tooltip" title="View">
+                                                data-std-income="${book.stdIncome}" data-book-status="${book.bookstatus}" data-room-id="${book.roomID}" data-bs-toggle="tooltip" title="View">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="modal" data-bs-target="#bookingEditModal" 
-                                                data-book-id="${book.bookingID}" data-ssn-name="${book.sessionName}" data-std-id="${book.stdID}" data-std-name="${book.stdName}" 
-                                                data-std-income="${book.stdIncome}" data-book-status="${book.bookStatus}" data-bs-toggle="tooltip" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>
+                                        <c:if test="${book.bookstatus == 'Pending'}">
+                                            <button type="button" class="btn btn-sm btn-success ms-1" onclick="changeStatus('${book.bookingID}', 'Approved')" title="Approve">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-danger ms-1" onclick="changeStatus('${book.bookingID}', 'Rejected')" title="Reject">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -152,53 +147,12 @@
                                 <label for="stdIncome" class="form-label">Student Income (RM)</label>
                                 <input type="text" class="form-control" id="stdIncome" name="stdIncome" readonly>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Edit Booking Modal -->
-        <div class="modal fade" id="bookingEditModal" tabindex="-1" aria-labelledby="bookingEditModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="bookingEditModalLabel">View Booking</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="EditBookingServlet" method="post">
-                            <input type="hidden" class="form-control" id="stdID" name="stdID" readonly>
                             <div class="mb-3">
-                                <label for="bookingID" class="form-label">Booking ID</label>
-                                <input type="text" class="form-control" id="bookingID" name="bookingID" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="sessionName" class="form-label">Session Name</label>
-                                <input type="text" class="form-control" id="sessionName" name="sessionName" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bookStatus" class="form-label">Booking Status</label>
-                                <select class="form-select" id="bookStatus" name="bookStatus">
-                                    <option value="APPROVED">Approved</option>
-                                    <option value="PENDING">Pending</option>
-                                    <option value="REJECTED">Rejected</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="stdName" class="form-label">Student Name</label>
-                                <input type="text" class="form-control" id="stdName" name="stdName" readonly>
-                            </div>
-                            <div class="mb-3">
-                                <label for="stdIncome" class="form-label">Student Income (RM)</label>
-                                <input type="text" class="form-control" id="stdIncome" name="stdIncome" readonly>
+                                <label for="roomID" class="form-label">Room ID</label>
+                                <input type="text" class="form-control" id="roomID" name="roomID" readonly>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <input type="submit" class="btn btn-primary" value="Save changes">
                             </div>
                         </form>
                     </div>
@@ -286,7 +240,7 @@
         const rows = document.querySelectorAll('#studentTable tbody tr');
         rows.forEach(row => {
             const studentName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const studentStatus = row.querySelector('td:nth-child(6) .badge').textContent.toLowerCase();
+            const studentStatus = row.querySelector('td:nth-child(5) .badge').textContent.toLowerCase();
 
             const matchesSearch = studentName.includes(input);
             const matchesStatus = statusFilter === '' || studentStatus === statusFilter;
@@ -309,47 +263,43 @@
         var stdID = button.getAttribute('data-std-id');
         var stdName = button.getAttribute('data-std-name');
         var stdIncome = button.getAttribute('data-std-income');
+        var roomID = button.getAttribute('data-room-id');
 
         var modalBookingID = bookingViewModal.querySelector('#bookingID');
         var modalSessionName = bookingViewModal.querySelector('#sessionName');
         var modalBookStatus = bookingViewModal.querySelector('#bookStatus');
-        var modalStdID = bookingEditModal.querySelector('#stdID');
         var modalStdName = bookingViewModal.querySelector('#stdName');
         var modalStdIncome = bookingViewModal.querySelector('#stdIncome');
+        var modalRoomID = bookingViewModal.querySelector('#roomID');
 
         modalBookingID.value = bookingID;
         modalSessionName.value = sessionName;
         modalBookStatus.value = bookStatus;
-        modalStdID.value = stdID;
         modalStdName.value = stdName;
         modalStdIncome.value = stdIncome;
+        modalRoomID.value = roomID;
     });
 
-    // Edit modal
-    var bookingEditModal = document.getElementById('bookingEditModal');
-    bookingEditModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var bookingID = button.getAttribute('data-book-id');
-        var sessionName = button.getAttribute('data-ssn-name');
-        var bookStatus = button.getAttribute('data-book-status');
-        var stdID = button.getAttribute('data-std-id');
-        var stdName = button.getAttribute('data-std-name');
-        var stdIncome = button.getAttribute('data-std-income');
+    function changeStatus(bookingID, status) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = 'ChangeBookingStatusServlet';
 
-        var modalBookingID = bookingEditModal.querySelector('#bookingID');
-        var modalSessionName = bookingEditModal.querySelector('#sessionName');
-        var modalBookStatus = bookingEditModal.querySelector('#bookStatus');
-        var modalStdID = bookingEditModal.querySelector('#stdID');
-        var modalStdName = bookingEditModal.querySelector('#stdName');
-        var modalStdIncome = bookingEditModal.querySelector('#stdIncome');
+        const bookingIDField = document.createElement('input');
+        bookingIDField.type = 'hidden';
+        bookingIDField.name = 'bookingID';
+        bookingIDField.value = bookingID;
+        form.appendChild(bookingIDField);
 
-        modalBookingID.value = bookingID;
-        modalSessionName.value = sessionName;
-        modalBookStatus.value = bookStatus;
-        modalStdID.value = stdID;
-        modalStdName.value = stdName;
-        modalStdIncome.value = stdIncome;
-    });
+        const statusField = document.createElement('input');
+        statusField.type = 'hidden';
+        statusField.name = 'status';
+        statusField.value = status;
+        form.appendChild(statusField);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
 </script>
 </body>
 </html>

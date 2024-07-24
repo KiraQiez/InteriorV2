@@ -74,7 +74,6 @@
                                                 <td>${payment.paymentDate}</td>
                                                 <td><img src="rsc/images/pdf-icon.png" width="30px" height="30px"></td>
                                                 <td width="150px">
-                                                    <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
                                                     <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="Download"><i class="fas fa-download"></i></button>
                                                 </td>
                                             </tr>
