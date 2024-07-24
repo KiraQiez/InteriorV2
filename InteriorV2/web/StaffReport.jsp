@@ -97,6 +97,7 @@
                                                 data-checked-by="${report.checkedByName}" data-handled-by="${report.handledByName}" data-bs-toggle="tooltip" title="View">
                                             <i class="fas fa-eye"></i>
                                         </button>
+                                            <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                                         <c:if test="${report.reportStatus != 'Completed' && report.reportStatus != 'Rejected'}">
                                             <button type="button" class="btn btn-sm btn-edit" data-bs-toggle="modal" data-bs-target="#editReportModal" 
                                                     data-id="${report.reportID}" data-title="${report.reportTitle}" data-desc="${report.reportDesc}" 
@@ -105,6 +106,7 @@
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </c:if>
+                                            </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>

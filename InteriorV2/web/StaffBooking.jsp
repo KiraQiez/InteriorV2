@@ -96,6 +96,7 @@
                                                 data-std-income="${book.stdIncome}" data-book-status="${book.bookstatus}" data-room-id="${book.roomID}" data-bs-toggle="tooltip" title="View">
                                             <i class="fas fa-eye"></i>
                                         </button>
+                                        <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                                         <c:if test="${book.bookstatus == 'Pending'}">
                                             <button type="button" class="btn btn-sm btn-success ms-1" onclick="changeStatus('${book.bookingID}', 'Approved')" title="Approve">
                                                 <i class="fas fa-check"></i>
@@ -103,6 +104,7 @@
                                             <button type="button" class="btn btn-sm btn-danger ms-1" onclick="changeStatus('${book.bookingID}', 'Rejected')" title="Reject">
                                                 <i class="fas fa-times"></i>
                                             </button>
+                                        </c:if>
                                         </c:if>
                                     </td>
                                 </tr>

@@ -1,51 +1,31 @@
 package com.interior.model;
 
 public class Block {
-    private String ID;
-    private String name;
-    private int capacity;
+    private String blockID;
+    private String blockName;
+    private String blockDesc;
 
-    // default
-    public Block() {
-        this.ID = "";
-        this.name = "";
-        this.capacity = 0;
+    public String getBlockID() {
+        return blockID;
     }
 
-    // normal
-    public Block(String ID, String name, int capacity) {
-        this.ID = ID;
-        this.name = name;
-        this.capacity = capacity;
+    public void setBlockID(String blockID) {
+        this.blockID = blockID;
     }
 
-    // setter
-    public void setID(String ID) {
-        this.ID = ID;
+    public String getBlockName() {
+        return blockName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBlockName(String blockName) {
+        this.blockName = blockName;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public String getBlockDesc() {
+        return blockDesc;
     }
 
-    // getter
-    public String getID() {
-        return ID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public String toString() {
-        return "Block{" + "ID=" + ID + ", name=" + name + ", capacity=" + capacity + '}';
+    public void setBlockDesc(String blockDesc) {
+        this.blockDesc = blockDesc;
     }
 }

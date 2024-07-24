@@ -15,7 +15,17 @@
         <div class="card-header">Room List</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">Add Room</button>
+                
+                <c:choose>
+                <c:when test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
+               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">Add Room</button>
+                </c:when>
+                <c:otherwise>
+                    <div></div>
+                </c:otherwise>
+                
+                </c:choose>
+                
                 <div class="d-flex">
                     <div class="input-group me-2" style="width: 300px;">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search Room" onkeyup="searchRoom()">
@@ -68,7 +78,9 @@
                                     <td>${room.availability}</td>
                                     <td width="150px">
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewRoomModal" onclick="viewRoom('${room.roomID}', '${room.blockID}', '${room.roomType}', '${room.maxCapacity}', '${room.availability}')"><i class="fas fa-eye"></i></button>
+                                        <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                                         <button type="button" class="btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="prepareDeleteRoom('${room.roomID}')"><i class="fas fa-trash-alt"></i></button>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>

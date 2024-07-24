@@ -21,8 +21,15 @@
         <div class="card-header">Staff List</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
+                <c:choose>
+                <c:when test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">Add Staff</button>
+                </c:when>
+                <c:otherwise>
+                    <div></div>
+                </c:otherwise>
                 
+                </c:choose>
                 <div class="d-flex">
                     <div class="input-group me-2" style="width: 300px;">
                         <input type="text" id="searchInput" class="form-control" placeholder="Search Staff" onkeyup="searchStaff()">
@@ -43,7 +50,7 @@
             </div>
 
             <sql:query var="staff_list" dataSource="${myDatasource}">
-                SELECT s.staffID, s.staffName, s.staffType, u.username, u.email 
+                SELECT s.staffID, s.staffName, s.staffType, u.username, u.email ,u.password
                 FROM STAFF s 
                 JOIN USERS u ON s.staffID = u.userID 
                 ORDER BY s.staffID
@@ -70,32 +77,37 @@
                         </c:when>
                         <c:otherwise>
                             <% int count = 0; %>
-                            <c:forEach var="staff" items="${staff_list.rows}">
+                            <c:forEach var="staff2" items="${staff_list.rows}">
                                 <tr>
                                     <% count++; %>
                                     <td width="20px"><%= count %></td>
-                                    <td>${staff.staffID}</td>
-                                    <td>${staff.staffName}</td>
-                                    <td>${staff.staffType}</td>
-                                    <td>${staff.username}</td>
-                                    <td>${staff.email}</td>
+                                    <td>${staff2.staffID}</td>
+                                    <td>${staff2.staffName}</td>
+                                    <td>${staff2.staffType}</td>
+                                    <td>${staff2.username}</td>
+                                    <td>${staff2.email}</td>
                                     <td width="150px">
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewStaffModal"
-                                                data-staff-id="${staff.staffID}" data-staff-name="${staff.staffName}" 
-                                                data-staff-username="${staff.username}" data-staff-email="${staff.email}"
-                                                data-staff-type="${staff.staffType}" data-staff-password="********" data-bs-toggle="tooltip" title="View">
+                                                data-staff-id="${staff2.staffID}" data-staff-name="${staff2.staffName}" 
+                                                data-staff-username="${staff2.username}" data-staff-email="${staff2.email}"
+                                                data-staff-type="${staff2.staffType}" data-staff-password="********" data-bs-toggle="tooltip" title="View">
                                             <i class="fas fa-eye"></i>
                                         </button>
+                                            
+                                            
+                                         <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">   
                                         <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="modal" data-bs-target="#editStaffModal"
-                                                data-staff-id="${staff.staffID}" data-staff-name="${staff.staffName}" 
-                                                data-staff-username="${staff.username}" data-staff-email="${staff.email}"
-                                                data-staff-type="${staff.staffType}" data-staff-password="********" data-bs-toggle="tooltip" title="Edit">
+                                                data-staff-id="${staff2.staffID}" data-staff-name="${staff2.staffName}" 
+                                                data-staff-username="${staff2.username}" data-staff-email="${staff2.email}"
+                                                data-staff-type="${staff2.staffType}" data-staff-password="${staff2.password}" data-bs-toggle="tooltip" title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="modal" data-bs-target="#deleteStaffModal"
-                                                data-staff-id="${staff.staffID}" data-bs-toggle="tooltip" title="Delete">
+                                                data-staff-id="${staff2.staffID}" data-bs-toggle="tooltip" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>
+                                            
+                                         </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>

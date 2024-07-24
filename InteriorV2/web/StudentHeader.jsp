@@ -4,6 +4,13 @@
 
 <jsp:useBean id="user" scope="session" class="com.interior.model.User" />
 
+<%
+    // Redirect to main login if user is not staff
+    if (session.getAttribute("user") == null || !"Student".equals(((com.interior.model.User) session.getAttribute("user")).getUsertype())) {
+        response.sendRedirect("MainLogin.jsp?message=You are not authorized to access this page.");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 

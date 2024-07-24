@@ -85,6 +85,7 @@
                                                 data-student-status="${student.stdStatus}" data-bs-toggle="tooltip" title="View">
                                             <i class="fas fa-eye"></i>
                                         </button>
+                                        <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                                         <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="modal" data-bs-target="#studentEditModal" 
                                                 data-student-id="${student.stdID}" data-student-name="${student.stdName}" data-student-phone="${student.stdPhone}" 
                                                 data-student-address="${student.stdAddress}" data-student-income="${student.stdIncome}" 
@@ -107,6 +108,7 @@
                                                 </button>
                                             </c:otherwise>
                                         </c:choose>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>

@@ -22,7 +22,16 @@
         <div class="card-header">Bill List</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generateBillModal">Generate Bill</button>
+                <c:choose>
+                <c:when test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
+               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#generateBillModal">Generate Bill</button>
+                </c:when>
+                <c:otherwise>
+                    <div></div>
+                </c:otherwise>
+                
+                </c:choose>
+                
 
                 <div class="d-flex">
                     <div class="input-group me-3" style="width: 300px;">
@@ -94,7 +103,9 @@
                                         </c:choose>
                                     </td>
                                     <td width="150px">
+                                        <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                                         <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="modal" data-bs-target="#deleteBillModal" data-billid="${bill.billID}"><i class="fas fa-trash"></i></button>
+                                        </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>

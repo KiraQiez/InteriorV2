@@ -18,7 +18,15 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h2 class="card-title text-center mb-4">Login</h2>
-
+                         <% 
+                            String messsage = request.getParameter("message"); 
+                            if (messsage != null) { 
+                        %>
+                            <div class="alert alert-danger" role="alert">
+                                <%= messsage %>
+                            </div>
+                        <% } %>
+                        
                         <% String message = (String) request.getAttribute("message"); %>
                         <% if (message != null) { %>
                             <div class="alert <%= message.contains("successful") ? "alert-success" : "alert-danger" %>" role="alert">

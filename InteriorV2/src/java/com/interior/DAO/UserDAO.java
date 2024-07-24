@@ -165,6 +165,8 @@ public class UserDAO {
 
         return exists;
     }
+    
+    
      public boolean updateUser(User user) {
         boolean status = false;
         Connection con = null;

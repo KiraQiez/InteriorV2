@@ -84,6 +84,14 @@
         <servlet-name>DeleteStaffServlet</servlet-name>
         <servlet-class>com.interior.controller.DeleteStaffServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddBlockServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddBlockServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteBlockServlet</servlet-name>
+        <servlet-class>com.interior.controller.DeleteBlockServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -167,6 +175,14 @@
     <servlet-mapping>
         <servlet-name>DeleteStaffServlet</servlet-name>
         <url-pattern>/DeleteStaffServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddBlockServlet</servlet-name>
+        <url-pattern>/AddBlockServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteBlockServlet</servlet-name>
+        <url-pattern>/DeleteBlockServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
