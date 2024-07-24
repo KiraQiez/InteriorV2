@@ -10,6 +10,24 @@
             </div>
         </div>
     </div>
+
+    <% String message = (String) request.getAttribute("message"); %>
+    <% if (message != null) {%>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
+        <%= message%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+
+    <% String billMessage = (String) request.getAttribute("billMessage"); %>
+    <% if (billMessage != null) {%>
+    <div class="alert <%= billMessage.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
+        <%= billMessage%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+
+
     <div class="card mb-3">
         <div class="card-header">Booking List</div>
         <div class="card-body">
@@ -80,8 +98,16 @@
                                         </c:choose>
                                     </td>
                                     <td width="150px">
-                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
-                                        <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#bookingViewModal" 
+                                                data-book-id="${book.bookingID}" data-ssn-name="${book.sessionName}" data-std-id="${book.stdID}" data-std-name="${book.stdName}" 
+                                                data-std-income="${book.stdIncome}" data-book-status="${book.bookStatus}" data-bs-toggle="tooltip" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-edit ms-1" data-bs-toggle="modal" data-bs-target="#bookingEditModal" 
+                                                data-book-id="${book.bookingID}" data-ssn-name="${book.sessionName}" data-std-id="${book.stdID}" data-std-name="${book.stdName}" 
+                                                data-std-income="${book.stdIncome}" data-book-status="${book.bookStatus}" data-bs-toggle="tooltip" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-delete ms-1" data-bs-toggle="tooltip" title="Disable"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -94,6 +120,90 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
+        </div>
+
+        <!-- View Booking Modal -->
+        <div class="modal fade" id="bookingViewModal" tabindex="-1" aria-labelledby="bookingViewModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookingViewModalLabel">View Booking</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="bookingID" class="form-label">Booking ID</label>
+                                <input type="text" class="form-control" id="bookingID" name="bookingID" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionName" class="form-label">Session Name</label>
+                                <input type="text" class="form-control" id="sessionName" name="sessionName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bookStatus" class="form-label">Booking Status</label>
+                                <input type="text" class="form-control" id="bookStatus" name="bookStatus" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdName" class="form-label">Student Name</label>
+                                <input type="text" class="form-control" id="stdName" name="stdName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdIncome" class="form-label">Student Income (RM)</label>
+                                <input type="text" class="form-control" id="stdIncome" name="stdIncome" readonly>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Booking Modal -->
+        <div class="modal fade" id="bookingEditModal" tabindex="-1" aria-labelledby="bookingEditModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookingEditModalLabel">View Booking</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="EditBookingServlet" method="post">
+                            <input type="hidden" class="form-control" id="stdID" name="stdID" readonly>
+                            <div class="mb-3">
+                                <label for="bookingID" class="form-label">Booking ID</label>
+                                <input type="text" class="form-control" id="bookingID" name="bookingID" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sessionName" class="form-label">Session Name</label>
+                                <input type="text" class="form-control" id="sessionName" name="sessionName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bookStatus" class="form-label">Booking Status</label>
+                                <select class="form-select" id="bookStatus" name="bookStatus">
+                                    <option value="APPROVED">Approved</option>
+                                    <option value="PENDING">Pending</option>
+                                    <option value="REJECTED">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdName" class="form-label">Student Name</label>
+                                <input type="text" class="form-control" id="stdName" name="stdName" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdIncome" class="form-label">Student Income (RM)</label>
+                                <input type="text" class="form-control" id="stdIncome" name="stdIncome" readonly>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-primary" value="Save changes">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -188,6 +298,58 @@
             }
         });
     }
+
+    // View modal
+    var bookingViewModal = document.getElementById('bookingViewModal');
+    bookingViewModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var bookingID = button.getAttribute('data-book-id');
+        var sessionName = button.getAttribute('data-ssn-name');
+        var bookStatus = button.getAttribute('data-book-status');
+        var stdID = button.getAttribute('data-std-id');
+        var stdName = button.getAttribute('data-std-name');
+        var stdIncome = button.getAttribute('data-std-income');
+
+        var modalBookingID = bookingViewModal.querySelector('#bookingID');
+        var modalSessionName = bookingViewModal.querySelector('#sessionName');
+        var modalBookStatus = bookingViewModal.querySelector('#bookStatus');
+        var modalStdID = bookingEditModal.querySelector('#stdID');
+        var modalStdName = bookingViewModal.querySelector('#stdName');
+        var modalStdIncome = bookingViewModal.querySelector('#stdIncome');
+
+        modalBookingID.value = bookingID;
+        modalSessionName.value = sessionName;
+        modalBookStatus.value = bookStatus;
+        modalStdID.value = stdID;
+        modalStdName.value = stdName;
+        modalStdIncome.value = stdIncome;
+    });
+
+    // Edit modal
+    var bookingEditModal = document.getElementById('bookingEditModal');
+    bookingEditModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var bookingID = button.getAttribute('data-book-id');
+        var sessionName = button.getAttribute('data-ssn-name');
+        var bookStatus = button.getAttribute('data-book-status');
+        var stdID = button.getAttribute('data-std-id');
+        var stdName = button.getAttribute('data-std-name');
+        var stdIncome = button.getAttribute('data-std-income');
+
+        var modalBookingID = bookingEditModal.querySelector('#bookingID');
+        var modalSessionName = bookingEditModal.querySelector('#sessionName');
+        var modalBookStatus = bookingEditModal.querySelector('#bookStatus');
+        var modalStdID = bookingEditModal.querySelector('#stdID');
+        var modalStdName = bookingEditModal.querySelector('#stdName');
+        var modalStdIncome = bookingEditModal.querySelector('#stdIncome');
+
+        modalBookingID.value = bookingID;
+        modalSessionName.value = sessionName;
+        modalBookStatus.value = bookStatus;
+        modalStdID.value = stdID;
+        modalStdName.value = stdName;
+        modalStdIncome.value = stdIncome;
+    });
 </script>
 </body>
 </html>
