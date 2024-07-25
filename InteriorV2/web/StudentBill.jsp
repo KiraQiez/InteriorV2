@@ -10,31 +10,31 @@
             </div>
         </div>
     </div>
-    
+
     <% String message = (String) request.getAttribute("message"); %>
-    <% if (message != null) { %>
-        <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger" %>" role="alert">
-            <%= message %>
-        </div>
+    <% if (message != null) {%>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%>" role="alert">
+        <%= message%>
+    </div>
     <% } %>
-    
+
     <div class="card mb-3">
         <div class="card-header">My Bills</div>
         <div class="card-body">
             <div class="d-flex justify-content-between mb-3">
                 <div class="input-group" style="width: 300px;">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search Bill ID" onkeyup="searchBills()">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    </div>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search Bill ID" onkeyup="searchBills()">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
                 <div class="d-flex">
                     <div class="input-group me-2" style="width: 200px;">
-                    <select id="statusFilter" class="form-select" onchange="filterBills()">
-                        <option value="">All Status</option>
-                        <option value="Unpaid">Unpaid</option>
-                        <option value="Paid">Paid</option>
-                    </select>
-                </div>
-                    
+                        <select id="statusFilter" class="form-select" onchange="filterBills()">
+                            <option value="">All Status</option>
+                            <option value="Unpaid">Unpaid</option>
+                            <option value="Paid">Paid</option>
+                        </select>
+                    </div>
+
                 </div>
             </div>
 
@@ -69,8 +69,8 @@
                             <% int count = 0; %>
                             <c:forEach var="bill" items="${bill_list.rows}">
                                 <tr>
-                                    <% count++; %>
-                                    <td width="20px"><%= count %></td>
+                                    <% count++;%>
+                                    <td width="20px"><%= count%></td>
                                     <td>${bill.billID}</td>
                                     <td>${bill.billType}</td>
                                     <td>${bill.totalAmount}</td>
@@ -86,12 +86,17 @@
                                     </td>
                                     <td>
                                         <c:if test="${bill.paymentID == null}">
-                                            <button type="button" class="btn btn-sm btn-primary">Pay Bill</button>
+                                            <form action="#" method="#" enctype="multipart/form-data">
+                                                <input type="hidden" name="billID" value="${bill.billID}">
+                                                <input type="file" name="paymentProof" accept="image/*" required>
+                                                <button type="submit" class="btn btn-sm btn-primary">Pay Bill</button>
+                                            </form>
                                         </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </c:otherwise>
+
                     </c:choose>
                 </tbody>
             </table>
@@ -114,8 +119,10 @@
 
     function changePage(page) {
         const pagination = document.getElementById("pagination");
-        if (page < 1) page = 1;
-        if (page > numPages()) page = numPages();
+        if (page < 1)
+            page = 1;
+        if (page > numPages())
+            page = numPages();
 
         pagination.innerHTML = "";
 
@@ -166,7 +173,7 @@
         }
     }
 
-    window.onload = function() {
+    window.onload = function () {
         changePage(1);
     };
 

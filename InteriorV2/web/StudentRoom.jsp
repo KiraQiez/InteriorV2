@@ -39,12 +39,12 @@
             </div>
 
             <sql:query var="booking_list" dataSource="${myDatasource}">
-                SELECT *
+                SELECT B.BOOKINGID, S.SESSIONNAME, B.ROOMID, B.BOOKINGDATE, B.BOOKINGCHECKOUT
                 FROM BOOKING B
                 JOIN SESSION S ON B.SESSIONID = S.SESSIONID
-                WHERE B.stdID = ?
+                WHERE B.STDID = ?
                 AND B.BOOKSTATUS = 'APPROVED'
-                ORDER BY B.bookingDate DESC
+                ORDER BY B.BOOKINGDATE DESC
                 <sql:param value="${user.userid}" />
             </sql:query>
 
@@ -79,7 +79,11 @@
                                     <td width="150px">
                                         <c:choose>
                                             <c:when test="${booking.BOOKINGCHECKOUT == null}">
-                                                <button type="button" class="btn btn-sm btn-danger">Check Out</button>
+                                                <form action="CheckOutServlet" method="post" onsubmit="return confirmCheckOut()">
+                                                    <input type="hidden" name="bookingID" value="${booking.bookingID}">
+                                                    <input type="hidden" name="roomID" value="${booking.roomID}">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Check Out</button>
+                                                </form>
                                             </c:when>
                                             <c:otherwise>
                                                 <span class="badge bg-danger">Checked Out</span>
@@ -92,6 +96,7 @@
                     </c:choose>
                 </tbody>
             </table>
+
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center" id="pagination"></ul>
             </nav>
@@ -318,4 +323,7 @@
     document.getElementById("blockID").addEventListener("change", fetchRoom);
     document.getElementById("roomType").addEventListener("change", fetchRoom);
 
+    function confirmCheckOut() {
+        return confirm("ARE YOU SURE TO CHECKOUT?");
+    }
 </script>

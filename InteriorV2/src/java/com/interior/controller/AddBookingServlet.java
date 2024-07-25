@@ -23,7 +23,7 @@ public class AddBookingServlet extends HttpServlet {
         String roomID = request.getParameter("roomID");
         String sessionIDStr = request.getParameter("sessionID");
         String stdID = request.getParameter("stdID"); // Assume this is passed in the form
-        String bookstatus = "Pending"; // Initial status
+        String bookstatus = "PENDING"; // Initial status
 
         logger.info("Received booking request with parameters - Block ID: " + blockID + ", Room Type: " + roomType + ", Room ID: " + roomID + ", Session ID: " + sessionIDStr + ", Student ID: " + stdID);
 
@@ -52,18 +52,17 @@ public class AddBookingServlet extends HttpServlet {
         booking.setStdID(stdID);
         booking.setBookstatus(bookstatus);
         booking.setBookingDate(new Date(System.currentTimeMillis()));
-
+        
         BookingDAO bookingDAO = new BookingDAO();
         boolean success = bookingDAO.addBooking(booking);
 
         if (success) {
-            logger.info("Booking successfully added");
-            request.setAttribute("message", "Booking successfully added.");
             Room room = new Room();
             RoomDAO roomDAO = new RoomDAO();
-            
-            room.setRoomID(booking.getRoomID());
+            room.setRoomID(roomID);
             roomDAO.updateRoomAvailability(room);
+            logger.info("Booking successfully added");
+            request.setAttribute("message", "Booking successfully added.");
         } else {
             logger.severe("Error adding booking");
             request.setAttribute("message", "Error adding booking.");

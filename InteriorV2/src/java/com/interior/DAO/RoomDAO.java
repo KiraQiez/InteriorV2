@@ -100,4 +100,18 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
+    
+    public void roomAvailabilityAfterCheckOut(Room room) {
+        String query = "UPDATE ROOM SET AVAILABILITY = AVAILABILITY + 1 WHERE ROOMID = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, room.getRoomID());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

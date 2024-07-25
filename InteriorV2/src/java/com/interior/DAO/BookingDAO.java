@@ -6,11 +6,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
 
 public class BookingDAO {
 
     public boolean addBooking(Booking booking) {
-        String query = "INSERT INTO BOOKING (bookingID, bookingDate, bookstatus, stdID, roomID, sessionID) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO BOOKING (BOOKINGID, BOOKINGDATE, BOOKSTATUS, STDID, ROOMID, SESSIONID, STAFFID, BOOKINGCHECKOUT) VALUES (?, ?, ?, ?, ?, ?, null, null)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
              
@@ -58,6 +59,23 @@ public class BookingDAO {
              
             ps.setString(1, booking.getBookstatus());
             ps.setString(2, booking.getBookingID());
+            
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean checkOut(String bookingID) {
+        String query = "UPDATE BOOKING SET BOOKINGCHECKOUT = ? WHERE BOOKINGID = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+             
+            ps.setDate(1, new Date(System.currentTimeMillis())); // Set current system date
+            ps.setString(2, bookingID);
             
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;

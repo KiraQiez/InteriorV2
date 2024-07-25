@@ -11,6 +11,15 @@ public class Booking {
     private int sessionID;
     private String blockID;  // Add this field
     private String roomType; // Add this field
+    private Date bookingCheckOut;
+
+    public Date getBookingCheckOut() {
+        return bookingCheckOut;
+    }
+
+    public void setBookingCheckOut(Date bookingCheckOut) {
+        this.bookingCheckOut = bookingCheckOut;
+    }
 
     // Getters and setters for all fields
 
