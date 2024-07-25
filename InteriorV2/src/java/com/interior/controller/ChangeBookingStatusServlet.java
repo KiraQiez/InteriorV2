@@ -3,6 +3,7 @@ package com.interior.controller;
 import com.interior.DAO.BookingDAO;
 import com.interior.model.Booking;
 import com.interior.DAO.BillDAO;
+import com.interior.DAO.RoomDAO;
 import com.interior.model.Bill;
 
 import javax.servlet.RequestDispatcher;
@@ -31,10 +32,12 @@ public class ChangeBookingStatusServlet extends HttpServlet {
         // Create an instance
         Booking book = new Booking();
         BookingDAO bookDAO = new BookingDAO();
+        RoomDAO roomDAO = new RoomDAO();
 
         // Get the parameters from the request
         String bookingID = request.getParameter("bookingID");
         String bookStatus = request.getParameter("status");
+         String roomID = request.getParameter("roomID");
 
         // Set the parameters to the object
         book.setBookingID(bookingID);
@@ -48,6 +51,7 @@ public class ChangeBookingStatusServlet extends HttpServlet {
                 // Check bookStatus and generate bill if approved
                 if (bookStatus.equals("Approved")) {
                     String billMessage = addBill(request, book);
+                    roomDAO.decreaseRoomAvailability(roomID);
                     request.setAttribute("billMessage", billMessage);
                 }
             } else {

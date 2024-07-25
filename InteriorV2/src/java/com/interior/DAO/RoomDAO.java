@@ -73,11 +73,12 @@ public class RoomDAO {
         }
     }
 
-    public void deleteRoom(String roomID) {
-        String query = "DELETE FROM ROOM WHERE roomID = ?";
+     
+    public void decreaseRoomAvailability(String roomID) {
+        String query = "UPDATE ROOM SET availability = availability - 1 WHERE roomID = ? AND availability > 0";
 
         try (Connection con = DBConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(query)) {
+             PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, roomID);
             ps.executeUpdate();
@@ -86,7 +87,24 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
+    
 
+
+    public boolean deleteRoom(String roomID) {
+        String query = "DELETE FROM ROOM WHERE roomID = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, roomID);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     public void updateRoomAvailability(Room room) {
         String query = "UPDATE ROOM SET AVAILABILITY = AVAILABILITY - 1 WHERE ROOMID = ?";
 

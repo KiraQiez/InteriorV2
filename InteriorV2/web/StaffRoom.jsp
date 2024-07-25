@@ -1,5 +1,10 @@
 <%@ include file="StaffHeader.jsp" %>
 
+<!-- SQL Query to retrieve blocks -->
+<sql:query var="block_list" dataSource="${myDatasource}">
+    SELECT * FROM BLOCK
+</sql:query>
+
 <!-- Main Content -->
 <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -11,6 +16,15 @@
             </div>
         </div>
     </div>
+    
+    <% String message = (String) request.getAttribute("message"); %>
+    <% if (message != null) { %>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger" %> alert-dismissible fade show" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+    
     <div class="card mb-3">
         <div class="card-header">Room List</div>
         <div class="card-body">
@@ -18,12 +32,11 @@
                 
                 <c:choose>
                 <c:when test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
-               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">Add Room</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addRoomModal">Add Room</button>
                 </c:when>
                 <c:otherwise>
                     <div></div>
                 </c:otherwise>
-                
                 </c:choose>
                 
                 <div class="d-flex">
@@ -69,7 +82,7 @@
                             <% int count = 0; %>
                             <c:forEach var="room" items="${room_list.rows}">
                                 <tr>
-                                    <% count++;%>
+                                    <% count++; %>
                                     <td width="20px"><%= count %></td>
                                     <td>${room.roomID}</td>
                                     <td>${room.blockID}</td>
@@ -79,7 +92,7 @@
                                     <td width="150px">
                                         <button type="button" class="btn btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewRoomModal" onclick="viewRoom('${room.roomID}', '${room.blockID}', '${room.roomType}', '${room.maxCapacity}', '${room.availability}')"><i class="fas fa-eye"></i></button>
                                         <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
-                                        <button type="button" class="btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="prepareDeleteRoom('${room.roomID}')"><i class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn btn-sm btn-delete" data-bs-toggle="modal" data-bs-target="#deleteRoomModal" onclick="prepareDeleteRoom('${room.roomID}')"><i class="fas fa-trash-alt"></i></button>
                                         </c:if>
                                     </td>
                                 </tr>
@@ -113,7 +126,7 @@
                         <select id="blockSelect" name="blockID" class="form-select" required>
                             <option value="">Select Block</option>
                             <c:forEach var="block" items="${block_list.rows}">
-                                <option value="${block.blockID}">${block.blockID}</option>
+                                <option value="${block.blockID}">${block.blockID} - ${block.blockName}</option>
                             </c:forEach>
                         </select>
                     </div>

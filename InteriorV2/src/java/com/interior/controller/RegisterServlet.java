@@ -1,6 +1,8 @@
 package com.interior.controller;
 
+import com.interior.DAO.StudentDAO;
 import com.interior.DAO.UserDAO;
+import com.interior.model.Student;
 import com.interior.model.User;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -28,33 +30,48 @@ public class RegisterServlet extends HttpServlet {
        
         User user = new User();
         UserDAO userDAO = new UserDAO();
+        StudentDAO studentDAO = new StudentDAO();
         
         String name = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String fullName = request.getParameter("fullname");
+        String ic = request.getParameter("ic");
 
         user.setUsername(name);
         user.setEmail(email);
         user.setPassword(password);
         user.setUsertype("Student");
 
+        Student student = new Student();
+        student.setStdName(fullName);
+        student.setStdIC(ic);
+        student.setStdStatus("Inactive");
+
         try {
             boolean status = userDAO.insertUser(user);
 
             if (status) {
-                request.setAttribute("message", "User registered successfully.");
-                request.setAttribute("user", user);
+                student.setStdId(user.getUserid());
+                boolean studentStatus = studentDAO.insertStudent(student);
+                if (studentStatus) {
+                    request.getSession().setAttribute("message", "User registered successfully.");
+                } else {
+                    request.getSession().setAttribute("message", "User registered but failed to insert student details.");
+                }
+                response.sendRedirect("MainRegister.jsp");
             } else {
                 request.setAttribute("message", "User registration failed.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("MainRegister.jsp");
+                dispatcher.forward(request, response);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("message", e.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("MainRegister.jsp");
+            dispatcher.forward(request, response);
         }
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("result.jsp");
-        dispatcher.forward(request, response);
     }
 
     @Override
@@ -62,4 +79,3 @@ public class RegisterServlet extends HttpServlet {
         return "Short description";
     }
 }
-

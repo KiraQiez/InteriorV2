@@ -98,10 +98,10 @@
                                         </button>
                                         <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
                                         <c:if test="${book.bookstatus == 'Pending'}">
-                                            <button type="button" class="btn btn-sm btn-success ms-1" onclick="changeStatus('${book.bookingID}', 'Approved')" title="Approve">
+                                            <button type="button" class="btn btn-sm btn-success ms-1" onclick="changeStatus('${book.bookingID}', 'Approved', '${book.roomID}')" title="Approve">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-danger ms-1" onclick="changeStatus('${book.bookingID}', 'Rejected')" title="Reject">
+                                            <button type="button" class="btn btn-sm btn-danger ms-1" onclick="changeStatus('${book.bookingID}', 'Rejected', '${book.roomID}')" title="Reject">
                                                 <i class="fas fa-times"></i>
                                             </button>
                                         </c:if>
@@ -282,7 +282,7 @@
         modalRoomID.value = roomID;
     });
 
-    function changeStatus(bookingID, status) {
+    function changeStatus(bookingID, status, roomID) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = 'ChangeBookingStatusServlet';
@@ -298,6 +298,12 @@
         statusField.name = 'status';
         statusField.value = status;
         form.appendChild(statusField);
+
+        const roomIDField = document.createElement('input');
+        roomIDField.type = 'hidden';
+        roomIDField.name = 'roomID';
+        roomIDField.value = roomID;
+        form.appendChild(roomIDField);
 
         document.body.appendChild(form);
         form.submit();

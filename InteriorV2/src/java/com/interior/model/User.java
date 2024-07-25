@@ -23,7 +23,7 @@ public class User {
         username = "";
         password = "";
         email = "";
-        usertype = "Student";
+        usertype = "";
 
     }
 

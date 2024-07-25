@@ -29,7 +29,7 @@
                             <img src="rsc/images/profilePic.png" alt="Profile Picture" class="profile-img">
                             <h4 class="mt-3">${user.username}</h4>
                             <p>${user.email}</p>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePictureModal">Change Picture</button>
+                            
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit Profile</button>
                         </div>
                     </div>
