@@ -88,8 +88,6 @@ public class RoomDAO {
         }
     }
     
-
-
     public boolean deleteRoom(String roomID) {
         String query = "DELETE FROM ROOM WHERE roomID = ?";
 
