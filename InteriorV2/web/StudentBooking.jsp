@@ -127,9 +127,9 @@
                             <label for="roomType" class="form-label">Room Type</label>
                             <select class="form-select" id="roomType" name="roomType" required>
                                 <option value="">Select Room Type</option>
-                                <option value="LUXURY">Luxury</option>
-                                <option value="DELUXE">Deluxe</option>
-                                <option value="NORMAL">Normal</option>
+                                <option value="Luxury">Luxury</option>
+                                <option value="Deluxe">Deluxe</option>
+                                <option value="Normal">Normal</option>
                             </select>
                         </div>
                         <div class="mb-3">

@@ -43,7 +43,7 @@
                 FROM BOOKING B
                 JOIN SESSION S ON B.SESSIONID = S.SESSIONID
                 WHERE B.STDID = ?
-                AND B.BOOKSTATUS = 'APPROVED'
+                AND B.BOOKSTATUS = 'Approved'
                 ORDER BY B.BOOKINGDATE DESC
                 <sql:param value="${user.userid}" />
             </sql:query>

@@ -23,7 +23,7 @@ public class AddBookingServlet extends HttpServlet {
         String roomID = request.getParameter("roomID");
         String sessionIDStr = request.getParameter("sessionID");
         String stdID = request.getParameter("stdID"); // Assume this is passed in the form
-        String bookstatus = "PENDING"; // Initial status
+        String bookstatus = "Pending"; // Initial status
 
         logger.info("Received booking request with parameters - Block ID: " + blockID + ", Room Type: " + roomType + ", Room ID: " + roomID + ", Session ID: " + sessionIDStr + ", Student ID: " + stdID);
 
