@@ -100,7 +100,10 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.interior.controller.LogoutServlet</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>PaymentServlet</servlet-name>
+        <servlet-class>com.interior.controller.PaymentServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -200,6 +203,10 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentServlet</servlet-name>
+        <url-pattern>/PaymentServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -34,7 +34,6 @@
                             <option value="Paid">Paid</option>
                         </select>
                     </div>
-
                 </div>
             </div>
 
@@ -86,17 +85,12 @@
                                     </td>
                                     <td>
                                         <c:if test="${bill.paymentID == null}">
-                                            <form action="#" method="#" enctype="multipart/form-data">
-                                                <input type="hidden" name="billID" value="${bill.billID}">
-                                                <input type="file" name="paymentProof" accept="image/*" required>
-                                                <button type="submit" class="btn btn-sm btn-primary">Pay Bill</button>
-                                            </form>
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="openPaymentModal('${bill.billID}', '${bill.billType}', '${bill.totalAmount}')">Pay Bill</button>
                                         </c:if>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </c:otherwise>
-
                     </c:choose>
                 </tbody>
             </table>
@@ -107,11 +101,40 @@
         </div>
     </div>
 </main>
-</div>
-</div>
-</body>
-</html>
 
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Confirm Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="paymentForm" action="PaymentServlet" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="modalBillID" name="billID">
+                    <div class="mb-3">
+                        <label for="modalBillType" class="form-label">Bill Type</label>
+                        <input type="text" class="form-control" id="modalBillType" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalTotalAmount" class="form-label">Total Amount</label>
+                        <input type="text" class="form-control" id="modalTotalAmount" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="paymentProof" class="form-label">Upload Payment Proof</label>
+                        <input type="file" class="form-control" id="paymentProof" name="paymentProof" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMN2JSg6EGcEGNdbt9H1DNWrPnnQ4lch2LkZbCxnH6DO0P2KUg+4WZyy8c+gPb0E" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12W8cFJF6F2nqToz8+Zf6Q8tMpoALewrNJ7CejL+dXGq1kcz" crossorigin="anonymous"></script>
 <script>
     let current_page = 1;
     const records_per_page = 10;
@@ -199,5 +222,13 @@
                 row.style.display = 'none';
             }
         });
+    }
+
+    function openPaymentModal(billID, billType, totalAmount) {
+        document.getElementById('modalBillID').value = billID;
+        document.getElementById('modalBillType').value = billType;
+        document.getElementById('modalTotalAmount').value = totalAmount;
+        const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+        paymentModal.show();
     }
 </script>
