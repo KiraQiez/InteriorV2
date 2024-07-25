@@ -39,7 +39,7 @@
         <div class="col-md-3">
             <div class="card text-white bg-warning mb-3">
                 <div class="card-header d-flex align-items-center">
-                    <i class="fas fa-file-signature me-2"></i>Total Registration
+                    <i class="fas fa-file-signature me-2"></i>Total Booking
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">${totalRegistrations.rows[0].total}</h5>
@@ -80,12 +80,55 @@
         SELECT reportStatus, COUNT(*) AS count FROM REPORT GROUP BY reportStatus
     </sql:query>
 
+    <%-- Fetch and Display Bills Data --%>
+    <sql:query var="paidBills" dataSource="${myDatasource}">
+        SELECT billID, totalAmount 
+        FROM BILL 
+        WHERE paymentID IS NOT NULL
+        FETCH FIRST 5 ROWS ONLY
+    </sql:query>
+    <sql:query var="unpaidBills" dataSource="${myDatasource}">
+        SELECT billID, totalAmount 
+        FROM BILL 
+        WHERE paymentID IS NULL
+        FETCH FIRST 5 ROWS ONLY
+    </sql:query>
+
     <div class="row">
         <div class="col-md-9">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header">Reports Overview</div>
                 <div class="card-body">
-                    <canvas id="reportsChart"></canvas>
+                    <canvas id="reportsChart" style="max-height: 300px;"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Bills Overview</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Paid Bills</h5>
+                            <ul class="list-group">
+                                <c:forEach var="bill" items="${paidBills.rows}">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Bill ID: ${bill.billID}
+                                        <span class="badge bg-success">$${bill.totalAmount}</span>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Unpaid Bills</h5>
+                            <ul class="list-group">
+                                <c:forEach var="bill" items="${unpaidBills.rows}">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Bill ID: ${bill.billID}
+                                        <span class="badge bg-danger">$${bill.totalAmount}</span>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,12 +180,39 @@
     document.addEventListener("DOMContentLoaded", function() {
         const ctx = document.getElementById('reportsChart').getContext('2d');
         const reportStatsData = {
-           
+            labels: [
+                <c:forEach var="stat" items="${reportStats.rows}">
+                    "${stat.reportStatus}",
+                </c:forEach>
+            ],
+            datasets: [{
+                data: [
+                    <c:forEach var="stat" items="${reportStats.rows}">
+                        ${stat.count},
+                    </c:forEach>
+                ],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(201, 203, 207, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
         const reportsChart = new Chart(ctx, {
             type: 'pie',
             data: reportStatsData,
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'top',
