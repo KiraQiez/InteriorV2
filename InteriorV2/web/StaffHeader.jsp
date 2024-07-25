@@ -63,12 +63,15 @@
                             <li class="nav-item me-1">
                                 <a class="nav-link" href="#"><i class="fas fa-envelope"></i></a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="#">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="rsc/images/profilePic.png" class="rounded-circle me-2" alt="Profile" width="40" height="40">
                                     <c:out value="${user.username}" />
                                     <i class="fas fa-ellipsis-v ms-2"></i>
                                 </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                    <li><a class="dropdown-item" href="LogoutServlet">Logout</a></li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -138,4 +141,4 @@
                     </li>
                 </ul>
             </nav>
-
+   

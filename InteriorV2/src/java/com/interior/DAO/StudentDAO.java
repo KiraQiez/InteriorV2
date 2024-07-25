@@ -50,14 +50,14 @@ public class StudentDAO {
         }
     }
      
-    public Student getStudentById(int userId) {
+    public Student getStudentById(String userId) {
         String query = "SELECT * FROM STUDENT WHERE stdID = ?";
         Student student = null;
         
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
              
-            ps.setInt(1, userId);
+            ps.setString(1, userId);
             ResultSet rs = ps.executeQuery();
             
             if (rs.next()) {
@@ -77,5 +77,24 @@ public class StudentDAO {
         }
         
         return student;
+    }
+    public boolean insertStudent(Student student) {
+        String query = "INSERT INTO STUDENT (stdID, stdName, stdIC, stdStatus) VALUES (?, ?, ?, ?)";
+        
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+             
+            ps.setString(1, student.getStdId());
+            ps.setString(2, student.getStdName());
+            ps.setString(3, student.getStdIC());
+            ps.setString(4, "Active");
+            
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

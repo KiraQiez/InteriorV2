@@ -76,10 +76,10 @@
                                     <td>${booking.bookingDate}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${booking.bookstatus == 'PENDING'}">
+                                            <c:when test="${booking.bookstatus == 'Pending'}">
                                                 <span class="badge bg-warning">Pending</span>
                                             </c:when>
-                                            <c:when test="${booking.bookstatus == 'APPROVED'}">
+                                            <c:when test="${booking.bookstatus == 'Approved'}">
                                                 <span class="badge bg-success">Approved</span>
                                             </c:when>
                                             <c:otherwise>

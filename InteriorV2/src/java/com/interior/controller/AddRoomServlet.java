@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 
 public class AddRoomServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -24,8 +25,14 @@ public class AddRoomServlet extends HttpServlet {
         room.setMaxCapacity(maxCapacity);
         room.setRoomID(roomDAO.generateRoomID(blockID));
 
-        roomDAO.addRoom(room);
+        try {
+            roomDAO.addRoom(room);
+            request.setAttribute("message", "Room added successfully!");
+        } catch (Exception e) {
+            request.setAttribute("message", "Error adding room: " + e.getMessage());
+        }
 
-        response.sendRedirect("StaffRoom.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("StaffRoom.jsp");
+        dispatcher.forward(request, response);
     }
 }

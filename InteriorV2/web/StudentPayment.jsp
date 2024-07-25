@@ -38,10 +38,13 @@
                 </div>
             </div>
 
-            <sql:query var="payment_list" dataSource="${myDatasource}">
-                SELECT PAYMENT.paymentID, BILL.billID, BILL.totalAmount, PAYMENT.paymentDate
+            
+
+             <sql:query var="payment_list" dataSource="${myDatasource}">
+                SELECT PAYMENT.paymentID, BILL.billID, STUDENT.stdName, STUDENT.stdaddress, STUDENT.stdphone, BILL.billType, BILL.totalAmount, PAYMENT.paymentDate
                 FROM PAYMENT
                 JOIN BILL ON PAYMENT.paymentID = BILL.paymentID
+                JOIN STUDENT ON BILL.stdID = STUDENT.stdID
                 WHERE BILL.stdID = ?
                 ORDER BY PAYMENT.paymentID
                 <sql:param value="${user.userid}" />
@@ -63,7 +66,7 @@
                     <c:choose>
                         <c:when test="${empty payment_list.rows}">
                             <tr>
-                                <td colspan="7">No payments available.</td>
+                                <td colspan="8">No payments available.</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
@@ -74,12 +77,12 @@
                                     <td width="20px"><%= count %></td>
                                     <td>${payment.paymentID}</td>
                                     <td>${payment.billID}</td>
+                      
                                     <td>${payment.totalAmount}</td>
                                     <td>${payment.paymentDate}</td>
                                     <td><img src="rsc/images/pdf-icon.png" width="30px" height="30px"></td>
                                     <td width="150px">
-                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="View"><i class="fas fa-eye"></i></button>
-                                        <button type="button" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="Download"><i class="fas fa-download"></i></button>
+                                        <a href="<%= request.getContextPath() %>/DownloadReceipt?paymentID=${payment.paymentID}&billID=${payment.billID}&amount=${payment.totalAmount}&paymentDate=${payment.paymentDate}&fullName=${payment.stdName}&address=${payment.stdaddress}&phoneNo=${payment.stdphone}&billType=${payment.billType}" class="btn btn-sm btn-view" data-bs-toggle="tooltip" title="Download"><i class="fas fa-download"></i></a>
                                     </td>
                                 </tr>
                             </c:forEach>
