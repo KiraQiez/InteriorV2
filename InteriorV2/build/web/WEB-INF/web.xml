@@ -96,9 +96,13 @@
         <servlet-name>DownloadReceipt</servlet-name>
         <servlet-class>com.interior.controller.DownloadReceipt</servlet-class>
     </servlet>
-    <servlet>
+     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.interior.controller.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckOutServlet</servlet-name>
+        <servlet-class>com.interior.controller.CheckOutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
@@ -197,8 +201,12 @@
         <url-pattern>/DownloadReceipt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/LogoutServlet</url-pattern>
+        <servlet-name>CheckOutServlet</servlet-name>
+        <url-pattern>/CheckOutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckOutServlet</servlet-name>
+        <url-pattern>/CheckOutServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
