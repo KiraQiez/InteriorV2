@@ -37,7 +37,8 @@ public class ChangeBookingStatusServlet extends HttpServlet {
         // Get the parameters from the request
         String bookingID = request.getParameter("bookingID");
         String bookStatus = request.getParameter("status");
-         String roomID = request.getParameter("roomID");
+        String roomID = request.getParameter("roomID");
+        String studID = request.getParameter("stdID");
 
         // Set the parameters to the object
         book.setBookingID(bookingID);
@@ -50,7 +51,10 @@ public class ChangeBookingStatusServlet extends HttpServlet {
                 request.setAttribute("message", "Booking status successfully updated.");
                 // Check bookStatus and generate bill if approved
                 if (bookStatus.equals("Approved")) {
-                    String billMessage = addBill(request, book);
+                    if (studID.isEmpty()) {
+                        System.out.println("no stud id");
+                    }
+                    String billMessage = addBill(request, book, studID);
                     roomDAO.decreaseRoomAvailability(roomID);
                     request.setAttribute("billMessage", billMessage);
                 }
@@ -66,13 +70,13 @@ public class ChangeBookingStatusServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    public String addBill(HttpServletRequest request, Booking book) {
+    public String addBill(HttpServletRequest request, Booking book, String stdID) {
         try {
             Bill bill = new Bill();
             BillDAO billDAO = new BillDAO();
 
             // Get the parameters from the request
-            String stdID = request.getParameter("stdID");
+            String studID = request.getParameter("stdID");
 
             // Set the parameters to the object
             // Set paymentID to null since the student didn't pay yet

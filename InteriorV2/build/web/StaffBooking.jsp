@@ -18,6 +18,14 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <% } %>
+    
+    <% String billMessage = (String) request.getAttribute("billMessage"); %>
+    <% if (billMessage != null) {%>
+    <div class="alert <%= message.contains("success") ? "alert-success" : "alert-danger"%> alert-dismissible fade show" role="alert">
+        <%= billMessage%>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
 
 
     <div class="card mb-3">
@@ -40,7 +48,7 @@
             </div>
 
             <sql:query var="book_list" dataSource="${myDatasource}">
-                SELECT B.bookingID, S.sessionName, ST.stdName, ST.stdIncome, B.bookstatus, B.roomID
+                SELECT B.bookingID, S.sessionName, ST.stdName, ST.stdIncome, B.bookstatus, B.roomID, B.stdID
                 FROM BOOKING B
                 JOIN SESSION S ON B.sessionID = S.sessionID
                 JOIN STUDENT ST ON B.stdID = ST.stdID
@@ -97,14 +105,14 @@
                                             <i class="fas fa-eye"></i>
                                         </button>
                                         <c:if test="${staff.staffType == 'Manager' || staff.staffType == 'Admin'}">
-                                        <c:if test="${book.bookstatus == 'Pending'}">
-                                            <button type="button" class="btn btn-sm btn-success ms-1" onclick="changeStatus('${book.bookingID}', 'Approved', '${book.roomID}')" title="Approve">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-danger ms-1" onclick="changeStatus('${book.bookingID}', 'Rejected', '${book.roomID}')" title="Reject">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </c:if>
+                                            <c:if test="${book.bookstatus == 'Pending'}">
+                                                <button type="button" class="btn btn-sm btn-success ms-1" onclick="changeStatus('${book.bookingID}', 'Approved', '${book.roomID}', '${book.stdID}')" title="Approve">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger ms-1" onclick="changeStatus('${book.bookingID}', 'Rejected', '${book.roomID}')" title="Reject">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </c:if>
                                         </c:if>
                                     </td>
                                 </tr>
@@ -282,7 +290,7 @@
         modalRoomID.value = roomID;
     });
 
-    function changeStatus(bookingID, status, roomID) {
+    function changeStatus(bookingID, status, roomID, stdID) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = 'ChangeBookingStatusServlet';
@@ -305,9 +313,16 @@
         roomIDField.value = roomID;
         form.appendChild(roomIDField);
 
+        const stdIDField = document.createElement('input');
+        stdIDField.type = 'hidden';
+        stdIDField.name = 'stdID';
+        stdIDField.value = stdID;
+        form.appendChild(stdIDField);
+
         document.body.appendChild(form);
         form.submit();
     }
+
 </script>
 </body>
 </html>

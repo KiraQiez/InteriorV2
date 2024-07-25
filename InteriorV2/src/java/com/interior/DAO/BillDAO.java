@@ -13,28 +13,38 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BillDAO {
+
     public boolean addBill(Bill bill) {
         String query = "INSERT INTO BILL (BILLID, BILLTYPE, TOTALAMOUNT, STDID, PAYMENTID) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            
+                PreparedStatement ps = con.prepareStatement(query)) {
+
             // setString
-            ps.setString(1, generateBillID(con));
+            String newBillID = generateBillID(con);
+            bill.setBillID(newBillID);
+            
+            ps.setString(1, bill.getBillID());
             ps.setString(2, bill.getBillType());
-            ps.setDouble(3, bill.getTotalAmount());
+            ps.setInt(3, bill.getTotalAmount());
             ps.setString(4, bill.getStdID());
             ps.setString(5, bill.getPaymentID());
-            
+
+            System.out.println(query);
+            System.out.println( bill.getBillID());
+            System.out.println(bill.getBillType());
+            System.out.println(bill.getTotalAmount());
+            System.out.println(bill.getStdID());
+            System.out.println(bill.getPaymentID());
             int rowsInserted = ps.executeUpdate();
             return rowsInserted > 0;
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
-    
-     public boolean updateBillWithPayment(String billID, InputStream paymentProof) {
+
+    public boolean updateBillWithPayment(String billID, InputStream paymentProof) {
         String insertPaymentQuery = "INSERT INTO PAYMENT (paymentID, paymentStatus, paymentDate, paymentProof) VALUES (?, ?, CURRENT_DATE, ?)";
         String updateBillQuery = "UPDATE BILL SET paymentID = ? WHERE billID = ?";
 
@@ -78,7 +88,7 @@ public class BillDAO {
     private String generatePaymentID(Connection con) throws SQLException {
         String query = "SELECT paymentID FROM PAYMENT ORDER BY paymentID DESC FETCH FIRST ROW ONLY";
         try (PreparedStatement ps = con.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+                ResultSet rs = ps.executeQuery()) {
 
             String lastId = null;
             if (rs.next()) {
@@ -95,8 +105,8 @@ public class BillDAO {
         }
     }
 
-      private String generateBillID(Connection con) throws SQLException {
-        String query = "SELECT billID FROM BILL ORDER BY billID DESC FETCH FIRST ROW ONLY";
+    private String generateBillID(Connection con) throws SQLException {
+        String query = "SELECT BILLID FROM BILL ORDER BY BILLID DESC FETCH FIRST ROW ONLY";
         PreparedStatement ps = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
 
@@ -115,17 +125,17 @@ public class BillDAO {
             return String.format("B%07d", num);
         }
     }
-      
-      public boolean deleteBill(String billID) {
+
+    public boolean deleteBill(String billID) {
         String query = "DELETE FROM BILL WHERE BILLID = ?";
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            
+                PreparedStatement ps = con.prepareStatement(query)) {
+
             ps.setString(1, billID);
-            
+
             int rowsDeleted = ps.executeUpdate();
             return rowsDeleted > 0;
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

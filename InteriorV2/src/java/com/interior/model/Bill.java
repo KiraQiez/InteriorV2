@@ -8,11 +8,11 @@ package com.interior.model;
 public class Bill {
     private String billID;
     private String billType;
-    private double totalAmount;
+    private int totalAmount;
     private String stdID;
     private String paymentID;
 
-    public Bill(String billID, String billType, double totalAmount, String stdID, String paymentID) {
+    public Bill(String billID, String billType, int totalAmount, String stdID, String paymentID) {
         this.billID = billID;
         this.billType = billType;
         this.totalAmount = totalAmount;
@@ -44,11 +44,11 @@ public class Bill {
         this.billType = billType;
     }
 
-    public double getTotalAmount() {
+    public int getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
     }
 
