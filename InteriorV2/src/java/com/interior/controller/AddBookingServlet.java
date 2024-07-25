@@ -2,6 +2,8 @@ package com.interior.controller;
 
 import com.interior.DAO.BookingDAO;
 import com.interior.model.Booking;
+import com.interior.DAO.RoomDAO;
+import com.interior.model.Room;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +59,11 @@ public class AddBookingServlet extends HttpServlet {
         if (success) {
             logger.info("Booking successfully added");
             request.setAttribute("message", "Booking successfully added.");
+            Room room = new Room();
+            RoomDAO roomDAO = new RoomDAO();
+            
+            room.setRoomID(booking.getRoomID());
+            roomDAO.updateRoomAvailability(room);
         } else {
             logger.severe("Error adding booking");
             request.setAttribute("message", "Error adding booking.");

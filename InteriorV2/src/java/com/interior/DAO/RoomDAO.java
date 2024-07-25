@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomDAO {
+
     public List<Room> getRoomsByBlockAndType(String blockID, String roomType) {
         List<Room> rooms = new ArrayList<>();
         String query = "SELECT roomID FROM ROOM WHERE blockID = ? AND roomType = ?";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+                PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, blockID);
             ps.setString(2, roomType);
@@ -37,7 +38,7 @@ public class RoomDAO {
         String query = "SELECT COUNT(roomID) AS roomCount FROM ROOM WHERE blockID = ?";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+                PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, blockID);
             ResultSet rs = ps.executeQuery();
@@ -58,7 +59,7 @@ public class RoomDAO {
         String query = "INSERT INTO ROOM (roomID, blockID, roomType, maxCapacity, availability) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+                PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, room.getRoomID());
             ps.setString(2, room.getBlockID());
@@ -71,8 +72,8 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
-    
-    
+
+     
     public void decreaseRoomAvailability(String roomID) {
         String query = "UPDATE ROOM SET availability = availability - 1 WHERE roomID = ? AND availability > 0";
 
@@ -87,6 +88,8 @@ public class RoomDAO {
         }
     }
     
+
+
     public boolean deleteRoom(String roomID) {
         String query = "DELETE FROM ROOM WHERE roomID = ?";
 
@@ -100,6 +103,19 @@ public class RoomDAO {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+    public void updateRoomAvailability(Room room) {
+        String query = "UPDATE ROOM SET AVAILABILITY = AVAILABILITY - 1 WHERE ROOMID = ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+
+            ps.setString(1, room.getRoomID());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
