@@ -26,7 +26,7 @@ CREATE TABLE STUDENT (
     stdAddress VARCHAR(255) ,
     stdIncome DECIMAL(10, 2) ,
     stdParentPhoneNum VARCHAR(30),
-    StdStatus VARCHAR(50) NOT NULL
+    StdStatus VARCHAR(50) NOT NULL,
     FOREIGN KEY (stdID) REFERENCES USERS(userID)
 );
 
@@ -48,7 +48,6 @@ CREATE TABLE STAFF (
     staffID VARCHAR(8) PRIMARY KEY NOT NULL,
     staffName VARCHAR(255) NOT NULL,
     staffType VARCHAR(30) NOT NULL,
-
     FOREIGN KEY (staffID) REFERENCES USERS(userID)
 );
 
