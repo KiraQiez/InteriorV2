@@ -1,15 +1,16 @@
 package com.interior.DAO;
 
+import com.interior.model.Booking;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.ResultSet;
-import com.interior.model.Booking;
+import java.sql.SQLException;
 
 public class BookingDAO {
 
     public boolean addBooking(Booking booking) {
-        String query = "INSERT INTO BOOKING (bookingID, bookingDate, bookstatus, stdID, roomID, SESSIONID) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO BOOKING (bookingID, bookingDate, bookstatus, stdID, roomID, sessionID) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
              
@@ -51,15 +52,15 @@ public class BookingDAO {
     }
     
     public boolean changeStatusBooking(Booking booking) {
-        String query = "UPDATE BOOKING SET BOOKSTATUS = ? WHERE BOOKINGID = ?";
+        String query = "UPDATE BOOKING SET bookstatus = ? WHERE bookingID = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
              
             ps.setString(1, booking.getBookstatus());
             ps.setString(2, booking.getBookingID());
             
-            int rowsInserted = ps.executeUpdate();
-            return rowsInserted > 0;
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
             
         } catch (SQLException e) {
             e.printStackTrace();

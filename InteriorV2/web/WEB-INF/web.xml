@@ -40,6 +40,62 @@
         <servlet-name>AddBookingServlet</servlet-name>
         <servlet-class>com.interior.controller.AddBookingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditStudentServlet</servlet-name>
+        <servlet-class>com.interior.controller.EditStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DisableStudentServlet</servlet-name>
+        <servlet-class>com.interior.controller.DisableStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EnableStudentServlet</servlet-name>
+        <servlet-class>com.interior.controller.EnableStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GenerateBillServlet</servlet-name>
+        <servlet-class>com.interior.controller.GenerateBillServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteBillServlet</servlet-name>
+        <servlet-class>com.interior.controller.DeleteBillServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeBookingStatusServlet</servlet-name>
+        <servlet-class>com.interior.controller.ChangeBookingStatusServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddRoomServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteRoomServlet</servlet-name>
+        <servlet-class>com.interior.controller.DeleteRoomServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddStaffServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddStaffServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditStaffServlet</servlet-name>
+        <servlet-class>com.interior.controller.EditStaffServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteStaffServlet</servlet-name>
+        <servlet-class>com.interior.controller.DeleteStaffServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddBlockServlet</servlet-name>
+        <servlet-class>com.interior.controller.AddBlockServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteBlockServlet</servlet-name>
+        <servlet-class>com.interior.controller.DeleteBlockServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DownloadReceipt</servlet-name>
+        <servlet-class>com.interior.controller.DownloadReceipt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -79,6 +135,62 @@
     <servlet-mapping>
         <servlet-name>AddBookingServlet</servlet-name>
         <url-pattern>/AddBookingServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditStudentServlet</servlet-name>
+        <url-pattern>/EditStudentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DisableStudentServlet</servlet-name>
+        <url-pattern>/DisableStudentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EnableStudentServlet</servlet-name>
+        <url-pattern>/EnableStudentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GenerateBillServlet</servlet-name>
+        <url-pattern>/GenerateBillServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteBillServlet</servlet-name>
+        <url-pattern>/DeleteBillServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeBookingStatusServlet</servlet-name>
+        <url-pattern>/ChangeBookingStatusServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddRoomServlet</servlet-name>
+        <url-pattern>/AddRoomServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteRoomServlet</servlet-name>
+        <url-pattern>/DeleteRoomServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddStaffServlet</servlet-name>
+        <url-pattern>/AddStaffServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditStaffServlet</servlet-name>
+        <url-pattern>/EditStaffServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteStaffServlet</servlet-name>
+        <url-pattern>/DeleteStaffServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddBlockServlet</servlet-name>
+        <url-pattern>/AddBlockServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteBlockServlet</servlet-name>
+        <url-pattern>/DeleteBlockServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DownloadReceipt</servlet-name>
+        <url-pattern>/DownloadReceipt</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

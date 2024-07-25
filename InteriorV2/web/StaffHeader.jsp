@@ -3,7 +3,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <jsp:useBean id="user" scope="session" class="com.interior.model.User" />
+<jsp:useBean id="staff" scope="session" class="com.interior.model.Staff" />
 
+<%
+    // Redirect to main login if user is not staff
+    if (session.getAttribute("user") == null || !"Staff".equals(((com.interior.model.User) session.getAttribute("user")).getUsertype())) {
+        response.sendRedirect("MainLogin.jsp?message=You are not authorized to access this page.");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,7 +83,7 @@
                         <h4>
                             <c:out value="${user.username}" />
                         </h4>
-                        <p>Administrator</p>
+                        <c:out value="${staff.staffType}" />
                     </div>
                 </div>
                 <ul class="nav flex-column">
@@ -118,18 +126,12 @@
                             </li>
                         </ul>
                     </li>
-                    
                     <li class="nav-item">
-                        <a href="#sessionSubMenu" class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" role="button"
-                           aria-expanded="false" aria-controls="sessionSubMenu">
-                            <div><i class="fas fa-calendar"></i>Session</div>
-                            <i class="fas fa-caret-down"></i>
-                        </a>
-                        <ul class="nav flex-column collapse submenu" id="sessionSubMenu" >
-                            <li class="nav-item">
-                                <a href="StaffSession.jsp" class="nav-link"><i class="fas fa-list-ul"></i>Session List</a>
-                            </li>
-                        </ul>
+                         <a href="StaffBlock.jsp" class="nav-link"><i class="fas fa-square"></i>Block</a>
+                    </li>
+               
+                    <li class="nav-item">
+                         <a href="StaffSession.jsp" class="nav-link"><i class="fas fa-calendar"></i>Session</a>
                     </li>
                     <li class="nav-item">
                         <a href="StaffStaff.jsp" class="nav-link"><i class="fas fa-chalkboard-teacher"></i>Staff</a>

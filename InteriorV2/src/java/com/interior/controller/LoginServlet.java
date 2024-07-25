@@ -2,6 +2,8 @@ package com.interior.controller;
 
 import com.interior.DAO.UserDAO;
 import com.interior.model.User;
+import com.interior.DAO.StaffDAO;
+import com.interior.model.Staff;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,6 +31,7 @@ public class LoginServlet extends HttpServlet {
 
         User user = new User();
         UserDAO userDAO = new UserDAO();
+        StaffDAO staffDAO = new StaffDAO();
 
         String name = request.getParameter("username");
         String password = request.getParameter("password");
@@ -43,10 +46,8 @@ public class LoginServlet extends HttpServlet {
                 user = userDAO.userInfo(user);
 
                 // Set session attributes
-                 HttpSession session = request.getSession();
+                HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                    
-                
 
                 request.setAttribute("message", "Login successful.");
                 request.setAttribute("user", user);
@@ -56,6 +57,10 @@ public class LoginServlet extends HttpServlet {
                 String targetPage = "";
 
                 if ("Staff".equals(userType)) {
+                    // Fetch staff-specific information
+                    Staff staff = staffDAO.getStaffInfo(user.getUserid());
+                    session.setAttribute("staff", staff);
+
                     targetPage = "StaffHomepage.jsp";
                 } else {
                     targetPage = "StudentHomepage.jsp";

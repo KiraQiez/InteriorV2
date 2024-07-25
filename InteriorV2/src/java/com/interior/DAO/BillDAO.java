@@ -33,7 +33,7 @@ public class BillDAO {
         }
     }
 
-    private String generateBillID(Connection con) throws SQLException {
+      private String generateBillID(Connection con) throws SQLException {
         String query = "SELECT billID FROM BILL ORDER BY billID DESC FETCH FIRST ROW ONLY";
         PreparedStatement ps = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
@@ -46,11 +46,27 @@ public class BillDAO {
         ps.close();
 
         if (lastId == null) {
-            return "B001"; // Start with the first ID
+            return "B0000001"; // Start with the first ID
         } else {
             int num = Integer.parseInt(lastId.substring(1));
             num++;
-            return String.format("B%03d", num);
+            return String.format("B%07d", num);
+        }
+    }
+      
+      public boolean deleteBill(String billID) {
+        String query = "DELETE FROM BILL WHERE BILLID = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            
+            ps.setString(1, billID);
+            
+            int rowsDeleted = ps.executeUpdate();
+            return rowsDeleted > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

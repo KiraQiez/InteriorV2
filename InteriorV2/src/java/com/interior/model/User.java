@@ -86,9 +86,6 @@ public class User {
     }
 
     public String getUserImage() {
-        if (image != null && image.length > 0) {
-            return Base64.getEncoder().encodeToString(image);
-        }
         return null;
     }
 

@@ -18,21 +18,37 @@ import com.interior.model.Report;
 public class ReportDAO {
 
     public boolean updateReportStatus(Report report) {
-        String query = "UPDATE report SET reportStatus = ? WHERE reportID = ?";
+        boolean status = false;
+        Connection con = null;
+        PreparedStatement ps = null;
 
-        try (Connection con = DBConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
+        try {
+            con = DBConnection.getConnection();
+            String sql = "UPDATE REPORT SET reportStatus = ?, handledByStaffID = ?, checkedByStaffID = ? WHERE reportID = ?";
+            ps = con.prepareStatement(sql);
+            ps.setString(1, report.getReportStatus());
+            ps.setString(2, report.getHandledByStaffID());
+            ps.setString(3, report.getCheckedByStaffID());
+            ps.setString(4, report.getReportID());
 
-            ps.setString(1, report.getStatus());
-            ps.setString(2, report.getReportID());
-            boolean rowUpdated = ps.executeUpdate() > 0;
-            return rowUpdated;
-
-        } catch (SQLException e) {
+            int i = ps.executeUpdate();
+            if (i > 0) {
+                status = true;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-            return false;
+        } finally {
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        return status;
     }
+
+
 
     // Method to get report info based on reportId
     public Report getReportById(String reportID) {
